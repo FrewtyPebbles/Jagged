@@ -1,2 +1,2 @@
 # Jagged
-Jagged is a feature rich scripting language that aims to be intuitive and fun.
+Jagged is a scripting language that aims to be intuitive and fun for small and large projects.
