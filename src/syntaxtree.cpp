@@ -20,12 +20,10 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
       {
         std::cout << "DEBUG:: (itterateScope) Parent : " <<  i->_syntax << " - Back of scope : " << i->_scope.back()._syntax << '\n';
         itterateScopeRecursion(*i);
-        //i->_scope.pop();
       }
       return {};
     }
   }
-  //std::cout << "Itterated Arguments.\n";
   return returnVec;
 }
 
@@ -57,7 +55,6 @@ std::string parseSyntax(std::string grammar, std::vector<syntaxNode> arguments, 
     std::cout << "Jag" << '\n';
 
   }
-  //std::cout << "Parsed Grammar.\n";
   return grammar;
 }
 
