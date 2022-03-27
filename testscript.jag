@@ -1,0 +1,16 @@
+jag
+<
+  input;
+  VAR(jag;close;);
+  open
+  <
+    close;
+    input;
+    print;
+  >
+>
+
+close
+<
+  input;
+>

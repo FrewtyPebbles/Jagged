@@ -1,5 +1,10 @@
 #include "syntaxtree.hpp"
 
+
+std::vector<Variable> scriptVariables;
+std::vector<constantVariable> scriptConstantVariables;
+std::vector<discVariable> scriptDiscVariables;
+
 syntaxNode::syntaxNode(){}
 syntaxNode::syntaxNode(std::string syntax):_syntax(std::move(syntax)){}
 
@@ -31,8 +36,7 @@ std::string parseSyntax(std::string grammar, std::vector<syntaxNode> arguments, 
 {
   if (grammar == "print")
   {
-    std::cout << "print" << '\n';
-
+    std::cout << scriptVariables.back().getVariableValue().back() << '\n';
   }
   else if (grammar == "input")
   {
@@ -50,10 +54,16 @@ std::string parseSyntax(std::string grammar, std::vector<syntaxNode> arguments, 
     std::cout << "close" << '\n';
 
   }
-  else if (grammar == "Jag")
+  else if (grammar == "jag")
   {
-    std::cout << "Jag" << '\n';
+    std::cout << "jag" << '\n';
 
+  }
+  else if (grammar == "VAR")
+  {
+    std::vector<std::string> rhs;
+    rhs.push_back(arguments[1]._syntax);
+    scriptVariables.push_back(Variable(currentScope.front(), arguments[0]._syntax, rhs));
   }
   return grammar;
 }

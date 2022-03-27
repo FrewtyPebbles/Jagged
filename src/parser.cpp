@@ -1,6 +1,23 @@
 #include "parser.hpp"
 
-
+const std::string scopeLookupTable[4] =
+{
+  "exec",
+  "if",
+  "ef",
+  "el"
+};
+std::string grammarLookupTable[8] =
+{
+  "print",
+  "input",
+  "open",
+  "close",
+  "jag",
+  "VAR",
+  "FIX",
+  "DISC"
+};
 
 void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool isArgument)
 {
@@ -12,12 +29,14 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
     {
       for (std::string _scope : scopeLookupTable)
       {
-        if (_scope == grammar) scopeStack.top()->_arguments.push_back(nextSyntax);
+        if (_scope == grammar) {scopeStack.top()->_arguments.push_back(nextSyntax);break;}
       }
       for (std::string _grammar : grammarLookupTable)
       {
-        if (_grammar == grammar) scopeStack.top()->_arguments.push_back(nextSyntax);
+        if (_grammar == grammar) {scopeStack.top()->_arguments.push_back(nextSyntax);break;}
       }
+      //If grammar does not exist
+
     }
     else  //grammar pushed to scope
     {
@@ -27,12 +46,12 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
       }
       for (std::string _grammar : grammarLookupTable)
       {
-        if (_grammar == grammar) {scopeStack.top()->_scope.push(nextSyntax);
+        if (_grammar == grammar) {scopeStack.top()->_scope.push(nextSyntax);break;}
       }
-    }
+      //if grammar does not exist
 
-    scopeStack.push(&scopeStack.top()->_scope.back());  //set scope to the new scope.
     }
+    scopeStack.push(&scopeStack.top()->_scope.back());  //set scope to the new scope.
   }
 }
 
@@ -50,6 +69,12 @@ int scanSource(std::string& source)
       case ' ':
         parseGrammar(scopeStack, keyword, isArgument);
         keyword = "";
+        break;
+      case '\n':
+        break;
+      case '\t':
+        break;
+      case '\r':
         break;
       case '.':
         parseGrammar(scopeStack, keyword, isArgument);
@@ -91,8 +116,6 @@ int scanSource(std::string& source)
         break;
       case '}':
         parseGrammar(scopeStack, keyword, isArgument);
-        std::cout << scopeStack.top()->_syntax << '\n';
-        scopeStack.pop();
         keyword = "";
         break;
       case '(':
@@ -141,6 +164,7 @@ int scanSource(std::string& source)
         break;
       case '>':
         parseGrammar(scopeStack, keyword, isArgument);
+        scopeStack.pop();
         keyword = "";
         break;
       case '!':
@@ -149,7 +173,6 @@ int scanSource(std::string& source)
         break;
       case ';':
         parseGrammar(scopeStack, keyword, isArgument);
-        std::cout << scopeStack.top()->_syntax << '\n';
         scopeStack.pop();
         keyword = "";
         break;

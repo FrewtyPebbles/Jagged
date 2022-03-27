@@ -5,6 +5,11 @@
 #include <string>
 #include <iostream>
 #include <new>
+#include <string>
+#include <vector>
+#include <utility>
+#include <fstream>
+#include <sstream>
 #pragma once
 
 /*pseudo
@@ -33,3 +38,48 @@ void itterateScopeRecursion(syntaxNode currentScope);
 void itterateScope(syntaxNode currentSyntax);  //itterate recursively through syntax tree
 
 std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments);  //itterate through arguments
+
+
+class Variable
+{
+private:
+  std::string varName;
+  std::vector<std::string> data;
+public:
+  Variable();
+  Variable(syntaxNode _instantiatedScope, std::string _varName, std::vector<std::string> _data);
+  void setVariable(std::string _varValue);
+  void appendVariable(std::string _varValue);
+  std::string& getVariableName();
+  std::vector<std::string>& getVariableValue();
+  syntaxNode instantiatedScope;
+};
+
+class constantVariable
+{
+private:
+  std::string varName;
+  std::vector<std::string> data;
+public:
+  constantVariable();
+  constantVariable(syntaxNode _instantiatedScope, std::string _varName, std::vector<std::string> _data);
+  std::string& getVariableName();
+  std::vector<std::string>& getVariableValue();
+  syntaxNode instantiatedScope;
+};
+
+class discVariable
+{
+private:
+  std::string varName;
+  std::string filePath;
+  std::vector<std::string> data;
+public:
+  discVariable();
+  discVariable(syntaxNode _instantiatedScope, std::string _varName, std::vector<std::string> _data, std::string _filePath);
+  std::string readName();
+  std::vector<std::string> readData();
+  void deleteVariable();
+  syntaxNode instantiatedScope;
+};
+void parseVariable(std::string Type, std::string name, std::string value); //feeds variable into data from parser.cpp
