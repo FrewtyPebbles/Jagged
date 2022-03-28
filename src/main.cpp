@@ -12,7 +12,8 @@
  - variable function causes a segmentation fault or bad_alloc.
 
 */
-const std::string VERSION = "0.1.1";
+
+const std::string VERSION = "0.2.1";
 
 int main (int argc, char* argv[])
 {
@@ -33,7 +34,6 @@ int main (int argc, char* argv[])
     {
       std::cout << "<|";
       std::cin >> input;
-      std::cout << '\n';
       scanSource(input);
     }
   }

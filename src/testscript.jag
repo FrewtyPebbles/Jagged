@@ -1,9 +1,7 @@
 jag
-<
   input;
-  VAR(jag;close;);
+  VAR(printedString;Hellohowareyou;);
   open
-  <
     close;
     input;
     print;
@@ -11,6 +9,5 @@ jag
 >
 
 close
-<
   input;
 >

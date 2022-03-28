@@ -33,7 +33,7 @@ public:
 
 std::string parseSyntax(std::string grammar, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);  //parse the current syntax
 
-void itterateScopeRecursion(syntaxNode currentScope);
+std::string itterateScopeRecursion(syntaxNode currentScope);
 
 void itterateScope(syntaxNode currentSyntax);  //itterate recursively through syntax tree
 
