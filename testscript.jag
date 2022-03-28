@@ -1,10 +1,8 @@
-VAR ( ComputerOutput, "What is your name?" );
-VAR ( ComputerOutput2, "Hello," );
-VAR ( ComputerOutput3, "nice to meet you!" );
-VAR ( UserInput, "Nothing." );
+VAR (ComputerOutput, "What is your name? ");
+VAR (ComputerOutput2, "Hello, ");
+VAR (ComputerOutput3, " nice to meet you!");
+VAR (UserInput, "Nothing.");
 
-print ( ComputerOutput );
-input ( UserInput );
-print ( ComputerOutput2 );
-print ( UserInput );
-print ( ComputerOutput3 );
+print (ComputerOutput);
+input (UserInput);
+print (ComputerOutput2, UserInput, ComputerOutput3);

@@ -35,12 +35,15 @@ std::string parseSyntax(std::string grammar, std::vector<syntaxNode> arguments, 
 {
   if (grammar == "print")
   {
-    for(unsigned i = 0; i < scriptVariables.size(); ++i)
+    for(unsigned j = 0; j < arguments.size(); ++j)
     {
-      if (scriptVariables[i].getVariableName() == arguments[0]._syntax)
+      for(unsigned i = 0; i < scriptVariables.size(); ++i)
       {
-        std::cout << scriptVariables[i].getVariableValue()[0] << '\n';
-        break;
+        if (scriptVariables[i].getVariableName() == arguments[j]._syntax)
+        {
+          std::cout << scriptVariables[i].getVariableValue()[0];
+          break;
+        }
       }
     }
   }
