@@ -11,12 +11,9 @@ syntaxNode::syntaxNode(std::string syntax):_syntax(std::move(syntax)){}
 std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
 {
   std::vector<syntaxNode> returnVec = {};
-  //std::cout << "segfault-------0000\n";
   for (std::vector<syntaxNode>::iterator it = begin(arguments); it != end(arguments); ++it)
   {
-    //std::cout << "segfault-------1111\n";
     syntaxNode * i = &(*it);
-    //std::cout << "segfault-------2222\n";
     if (i->_scope.empty())//scope empty
     {
       returnVec.push_back(syntaxNode(parseSyntax(i->_syntax, i->_arguments, i->_scope)));
@@ -26,7 +23,6 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
       //scope not empty
       while(!i->_scope.empty())
       {
-        //std::cout << "DEBUG:: (itterateScope) Parent : " <<  i->_syntax << " - Back of scope : " << i->_scope.back()._syntax << '\n';
         itterateScopeRecursion(*i);
       }
       return {};
@@ -39,12 +35,27 @@ std::string parseSyntax(std::string grammar, std::vector<syntaxNode> arguments, 
 {
   if (grammar == "print")
   {
-    std::cout << scriptVariables[0].getVariableValue()[0] << '\n';
+    for(unsigned i = 0; i < scriptVariables.size(); ++i)
+    {
+      if (scriptVariables[i].getVariableName() == arguments[0]._syntax)
+      {
+        std::cout << scriptVariables[i].getVariableValue()[0] << '\n';
+        break;
+      }
+    }
   }
   else if (grammar == "input")
   {
-    std::string inputTest;
-    std::cin >> inputTest;
+    std::string input;
+    for(unsigned i = 0; i < scriptVariables.size(); ++i)
+    {
+      if (scriptVariables[i].getVariableName() == arguments[0]._syntax)
+      {
+        getline(std::cin, input);
+        scriptVariables[i].setVariable(input);
+        break;
+      }
+    }
 
   }
   else if (grammar == "open")
@@ -66,11 +77,8 @@ std::string parseSyntax(std::string grammar, std::vector<syntaxNode> arguments, 
   {
     std::vector<std::string> rhs;
     rhs.push_back(arguments[1]._syntax);
-    //std::cout << "^^^rhs\n";
-    Variable tempVar(arguments[0], arguments[1]._syntax, rhs);
-    //std::cout << "^^^var\n";
+    Variable tempVar(arguments[0], arguments[0]._syntax, rhs);
     scriptVariables.push_back(tempVar);
-    //std::cout << "^^^goodaloc\n";
   }
   return grammar;
 }
@@ -88,8 +96,6 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
 
 void  itterateScope(syntaxNode currentSyntax)
 {
-  //arguments debug
-  //for (syntaxNode i : currentSyntax._arguments){std::cout << "DEBUG:: (itterateScope) Parent : " <<  currentSyntax._syntax << " - Argument : " << i._syntax << '\n';}
-      itterateScopeRecursion(currentSyntax);
+  itterateScopeRecursion(currentSyntax);
   return;
 }

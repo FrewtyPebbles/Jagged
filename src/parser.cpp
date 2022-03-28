@@ -67,154 +67,173 @@ int scanSource(std::string& source)
 {
   std::string keyword;
   bool isArgument = false;
-
+  bool isQuoting = false;
   std::stack<syntaxNode*> scopeStack = {};
   scopeStack.push(new syntaxNode("global"));
 
   for(char character : source)
   {
-    switch (character) {
-      case ' ':
+    if (character == '"')
+    {
+      //check quoting.
+      if (isQuoting == true)
+      {
+        //push quote
         parseGrammar(scopeStack, keyword, isArgument);
+        //scopeStack.pop();
         keyword = "";
-        break;
-      case '\n':
-        break;
-      case '\t':
-        break;
-      case '\r':
-        break;
-      case '.':
-        parseGrammar(scopeStack, keyword, isArgument);
-        //std::cout << scopeStack.top()->_syntax << '\n';
-        scopeStack.pop();
-        keyword = "";
-        break;
-      case '=':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '+':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '-':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '*':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '/':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '&':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '|':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '{':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '}':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '(':
-        parseGrammar(scopeStack, keyword, isArgument);
-        isArgument = true;
-        keyword = "";
-        break;
-      case ')':
-        parseGrammar(scopeStack, keyword, isArgument);
-        isArgument = false;
-        scopeStack.pop();
-        keyword = "";
-        break;
-      case '[':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case ']':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '\'':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '"':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case ',':
-        parseGrammar(scopeStack, keyword, isArgument);
-        //std::cout << scopeStack.top()->_syntax << '\n';
-        scopeStack.pop();
-        keyword = "";
-        break;
-      case '?':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '@':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '<':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '>':
-        parseGrammar(scopeStack, keyword, isArgument);
-        scopeStack.pop();
-        keyword = "";
-        break;
-      case '!':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case ';':
-        parseGrammar(scopeStack, keyword, isArgument);
-        scopeStack.pop();
-        keyword = "";
-        break;
-      case '%':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '$':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '^':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '#':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '~':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '`':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      case '_':
-        parseGrammar(scopeStack, keyword, isArgument);
-        keyword = "";
-        break;
-      default:
-        keyword += character;
+      }
+      isQuoting = !isQuoting;
+    }
+    if (!isQuoting)
+    {
+      switch (character)
+      {
+        case ' ':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '\n':
+          break;
+        case '\t':
+          break;
+        case '\r':
+          break;
+        case '.':
+          parseGrammar(scopeStack, keyword, isArgument);
+          scopeStack.pop();
+          keyword = "";
+          break;
+        case '=':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '+':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '-':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '*':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '/':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '&':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '|':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '{':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '}':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '(':
+          parseGrammar(scopeStack, keyword, isArgument);
+          isArgument = true;
+          keyword = "";
+          break;
+        case ')':
+          parseGrammar(scopeStack, keyword, isArgument);
+          isArgument = false;
+          scopeStack.pop();
+          keyword = "";
+          break;
+        case '[':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case ']':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '\'':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '"':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case ',':
+          parseGrammar(scopeStack, keyword, isArgument);
+          //std::cout << scopeStack.top()->_syntax << '\n';
+          scopeStack.pop();
+          keyword = "";
+          break;
+        case '?':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '@':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '<':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '>':
+          parseGrammar(scopeStack, keyword, isArgument);
+          scopeStack.pop();
+          keyword = "";
+          break;
+        case '!':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case ';':
+          parseGrammar(scopeStack, keyword, isArgument);
+          scopeStack.pop();
+          keyword = "";
+          break;
+        case '%':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '$':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '^':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '#':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '~':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '`':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        case '_':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
+          break;
+        default:
+          keyword += character;
+      }
+    }
+    else if (character != '"')
+    {
+      keyword += character;
     }
   }
   //std::cout << "Compiled Successfully.\n";
