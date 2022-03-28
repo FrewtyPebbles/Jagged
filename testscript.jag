@@ -1,13 +1,7 @@
-jag
-  input;
-  VAR(printedString;Hellohowareyou;);
-  open
-    close;
+close
+  input
     input;
+    VAR( printedString, HelloHowAreYou );
     print;
   >
->
-
-close
-  input;
 >

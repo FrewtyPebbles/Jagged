@@ -134,6 +134,7 @@ int scanSource(std::string& source)
       case ')':
         parseGrammar(scopeStack, keyword, isArgument);
         isArgument = false;
+        scopeStack.pop();
         keyword = "";
         break;
       case '[':
