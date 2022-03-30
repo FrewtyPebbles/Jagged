@@ -5,7 +5,8 @@ std::vector<std::string> scopeLookupTable =
   "exec",
   "if",
   "ef",
-  "el"
+  "el",
+  "compute"
 };
 std::vector<std::string> grammarLookupTable =
 {
@@ -16,9 +17,19 @@ std::vector<std::string> grammarLookupTable =
   "jag",
   "VAR",
   "FIX",
-  "DISC"
+  "DISC",
+  "add",
+  "subtract",
+  "multiply",
+  "divide"
 };
+
+std::vector<std::string> literalLookupTable;
+
+std::vector<std::string> variableLookupTable;
+
 bool grammarExists = false;
+bool isQuoting = false;
 
 void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool isArgument)
 {
@@ -31,11 +42,11 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
     {
       for (std::string _scope : scopeLookupTable)
       {
-        if (_scope == grammar) {grammarExists = true;scopeStack.top()->_arguments.push_back(nextSyntax);break;}
+        if (_scope == grammar) {nextSyntax._type = "scope";grammarExists = true;scopeStack.top()->_arguments.push_back(nextSyntax);break;}
       }
       for (std::string _grammar : grammarLookupTable)
       {
-        if (_grammar == grammar) {grammarExists = true;scopeStack.top()->_arguments.push_back(nextSyntax);break;}
+        if (_grammar == grammar) {nextSyntax._type = "grammar";grammarExists = true;scopeStack.top()->_arguments.push_back(nextSyntax);break;}
       }
       //If grammar does not exist
 
@@ -44,20 +55,29 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
     {
       for (std::string _scope : scopeLookupTable)
       {
-        if (_scope == grammar) {grammarExists = true;scopeStack.top()->_scope.push(nextSyntax); break;}
+        if (_scope == grammar) {nextSyntax._type = "scope";grammarExists = true;scopeStack.top()->_scope.push(nextSyntax); break;}
       }
       for (std::string _grammar : grammarLookupTable)
       {
-        if (_grammar == grammar) {grammarExists = true;scopeStack.top()->_scope.push(nextSyntax);break;}
+        if (_grammar == grammar) {nextSyntax._type = "grammar";grammarExists = true;scopeStack.top()->_scope.push(nextSyntax);break;}
       }
       //if grammar does not exist
 
     }
     if (!grammarExists)
     {
-      grammarLookupTable.push_back(grammar);
-      //for (std::string _grammar : grammarLookupTable)std::cout << _grammar << '\n';
-      scopeStack.top()->_arguments.push_back(nextSyntax);
+      if (isQuoting)
+      {
+        literalLookupTable.push_back(grammar);
+        nextSyntax._type = "literal";
+        scopeStack.top()->_arguments.push_back(nextSyntax);
+      }
+      else
+      {
+        variableLookupTable.push_back(grammar);
+        nextSyntax._type = "variable";
+        scopeStack.top()->_arguments.push_back(nextSyntax);
+      }
     }
     scopeStack.push(&scopeStack.top()->_scope.back());  //set scope to the new scope.
   }
@@ -67,9 +87,9 @@ int scanSource(std::string& source)
 {
   std::string keyword;
   bool isArgument = false;
-  bool isQuoting = false;
+
   std::stack<syntaxNode*> scopeStack = {};
-  scopeStack.push(new syntaxNode("global"));
+  scopeStack.push(new syntaxNode("global","global"));
 
   for(char character : source)
   {

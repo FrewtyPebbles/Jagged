@@ -4,16 +4,16 @@
 
  - implement functions and variables.
 
- - possibly append variable names to grammarLookupTable to parse them better after
- instantiation.
-
  BUGS:
 
- - variable function causes a segmentation fault or bad_alloc.
+ - add a stack to parser.cpp to feed recursive argument scopes
+ ex: thing(thing, (thing, thing));
+
+ - Fix bug with 'free(): invalid pointer' with math
 
 */
 
-const std::string VERSION = "0.2.6";
+const std::string VERSION = "0.3.6";
 
 int main (int argc, char* argv[])
 {

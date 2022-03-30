@@ -10,6 +10,10 @@
 #include <utility>
 #include <fstream>
 #include <sstream>
+#include <cstdlib>
+#include <cstddef>
+#include <string.h>
+#include <iomanip>
 #pragma once
 
 /*pseudo
@@ -25,13 +29,14 @@ class syntaxNode
 {
 public:
   syntaxNode();
-  syntaxNode(std::string syntax);
+  syntaxNode(std::string type, std::string syntax);
+  std::string _type;
   std::string _syntax;  // the syntax to be parsed in the current node
   std::vector<syntaxNode>  _arguments;  // arguments for the scope ex: (arg1, arg2, arg3)
   std::queue<syntaxNode> _scope;  // the queue of syntax nodes within the scope of this syntaxNode -- if it is empy it returns to the parent syntax node.
 };
 
-std::string parseSyntax(std::string grammar, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);  //parse the current syntax
+syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);  //parse the current syntax
 
 std::string itterateScopeRecursion(syntaxNode currentScope);
 
@@ -83,3 +88,18 @@ public:
   syntaxNode instantiatedScope;
 };
 void parseVariable(std::string Type, std::string name, std::string value); //feeds variable into data from parser.cpp
+
+//methods
+
+std::string parseArguments(unsigned argumentnum, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+
+//math functions
+std::string subtractNums(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+std::string addNums(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+std::string divideNums(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+std::string multiplyNums(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+
+//Standard library functions
+void printMethod(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+void inputMethod( std::vector<syntaxNode> arguments );
+void varMethod(std::vector<syntaxNode> arguments);

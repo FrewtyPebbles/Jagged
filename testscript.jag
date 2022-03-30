@@ -1,8 +1,6 @@
-VAR (ComputerOutput, "What is your name? ");
-VAR (ComputerOutput2, "Hello, ");
-VAR (ComputerOutput3, " nice to meet you!");
 VAR (UserInput, "Nothing.");
 
-print (ComputerOutput);
+print ("What is your name? ");
 input (UserInput);
-print (ComputerOutput2, UserInput, ComputerOutput3);
+subtract("5.0", "1.0");
+print ("Hello, ", UserInput, " nice to meet you!");
