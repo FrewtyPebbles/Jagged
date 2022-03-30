@@ -7,9 +7,8 @@
  BUGS:
 
  - add a stack to parser.cpp to feed recursive argument scopes
+ if scopes for arguments is broken (not sure if it is yet).
  ex: thing(thing, (thing, thing));
-
- - Fix bug with 'free(): invalid pointer' with math
 
 */
 
