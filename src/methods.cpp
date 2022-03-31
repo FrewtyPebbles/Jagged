@@ -29,8 +29,7 @@ std::string parseArguments(unsigned argumentnum, syntaxNode syntax, std::vector<
 //Use reverse pemdas. s a d m e p
 
 std::string subtractNums(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
-{std::cout << std::to_string(strtof(parseArguments(0, syntax, arguments, currentScope).c_str(), nullptr) - strtof(parseArguments(1, syntax, arguments, currentScope).c_str(), nullptr)) << "\n";
-return std::to_string(strtof(parseArguments(0, syntax, arguments, currentScope).c_str(), nullptr) - strtof(parseArguments(1, syntax, arguments, currentScope).c_str(), nullptr));}//BUG
+{return std::to_string(strtof(parseArguments(0, syntax, arguments, currentScope).c_str(), nullptr) - strtof(parseArguments(1, syntax, arguments, currentScope).c_str(), nullptr));}//BUG
 
 std::string addNums(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(0, syntax, arguments, currentScope).c_str(), nullptr) + strtof(parseArguments(1, syntax, arguments, currentScope).c_str(), nullptr));}
