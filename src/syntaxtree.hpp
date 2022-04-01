@@ -14,6 +14,7 @@
 #include <cstddef>
 #include <string.h>
 #include <iomanip>
+#include <algorithm> //find()
 #pragma once
 
 /*pseudo
@@ -91,15 +92,15 @@ void parseVariable(std::string Type, std::string name, std::string value); //fee
 
 //methods
 
-std::string parseArguments(unsigned argumentnum, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+std::string parseArguments(std::vector<Variable>& scriptVariables1, unsigned argumentnum, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
 
 //math functions
-std::string subtractNums(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
-std::string addNums(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
-std::string divideNums(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
-std::string multiplyNums(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+std::string subtractNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+std::string addNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+std::string divideNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+std::string multiplyNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
 
 //Standard library functions
-void printMethod(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
-void inputMethod( std::vector<syntaxNode> arguments );
-void varMethod(std::vector<syntaxNode> arguments);
+void printMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+void inputMethod(std::vector<Variable>& scriptVariables, std::vector<syntaxNode> arguments );
+void varMethod(std::vector<Variable>& scriptVariables, std::vector<syntaxNode> arguments);

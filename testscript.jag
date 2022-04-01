@@ -1,0 +1,18 @@
+VAR("num1","5");
+VAR("num2","1");
+
+print("What is your name?`n");
+input("UserInput")
+  VAR("UserInput","Nothing.");
+  ^
+print("Math : ", multiply(divide(add(num1, num2), "2"),"5"), "  = ((5 + 1) / 2) * 5`n");
+print("Hello, ", UserInput," nice to meet you!`n");
+
+print( num1, " + ", num2, " = ", add(num1,num2), "`n")
+  input("num1")
+    print("Enter the first number: ");
+    ^
+  input("num2")
+    print("Enter the second number: ");
+    ^
+  ^

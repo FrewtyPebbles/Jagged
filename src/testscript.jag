@@ -1,8 +1,0 @@
-VAR (UserInput, "Nothing.");
-VAR (num1, "5.0");
-VAR (num2, "1.0");
-
-print ("What is your name? ");
-input ( UserInput );
-print( add(num1, num2), " < - arythmetic ");
-print ("Hello, ", UserInput, " nice to meet you!");

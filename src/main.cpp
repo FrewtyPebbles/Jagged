@@ -6,13 +6,11 @@
 
  BUGS:
 
- - add a stack to parser.cpp to feed recursive argument scopes
- if scopes for arguments is broken (not sure if it is yet).
- ex: thing(thing, (thing, thing));
+ - Variables must be referenced via string literal when writing to them.
 
 */
 
-const std::string VERSION = "0.3.6";
+const std::string VERSION = "0.5.8";
 
 int main (int argc, char* argv[])
 {
@@ -28,11 +26,11 @@ int main (int argc, char* argv[])
   }
   else
   {
-    std::cout << " - Jagged - v:" << VERSION << '\n';
+    std::cout << " Jagged v" << VERSION << '\n';
     while(true)
     {
-      std::cout << "<|";
-      std::cin >> input;
+      std::cout << "§";
+      getline(std::cin, input);
       scanSource(input);
     }
   }
