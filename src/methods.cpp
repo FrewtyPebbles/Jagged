@@ -24,10 +24,12 @@ std::string parseArguments(std::vector<Variable>& scriptVariables1, unsigned arg
   //for (syntaxNode i : arguments){std::cout << "ARGS: " << i._syntax << '\n';}
   return argstr;
 }
+
+//MATH
 //Use reverse pemdas. s a d m e p
 
 std::string subtractNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
-{return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) - strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}//BUG
+{return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) - strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
 
 std::string addNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) + strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
@@ -37,6 +39,21 @@ std::string divideNums(std::vector<Variable>& scriptVariables, syntaxNode syntax
 
 std::string multiplyNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) * strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
+
+//COMPARISON return 1 or 0
+
+std::string equal(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
+{return std::to_string(parseArguments(scriptVariables, 0, syntax, arguments, currentScope) == parseArguments(scriptVariables, 1, syntax, arguments, currentScope));}
+std::string less(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
+{}
+std::string greater(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
+{}
+std::string greaterOrEqual(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
+{}
+std::string greaterOrLess(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
+{}
+
+//MISC FUNCTIONS
 
 void printMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
 {
@@ -60,9 +77,16 @@ void printMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std:
   }
 }
 
-void inputMethod(std::vector<Variable>& scriptVariables,  std::vector<syntaxNode> arguments )
+std::string inputMethod(std::vector<Variable>& scriptVariables,  std::vector<syntaxNode> arguments )
 {
   std::string input;
+  //std::cout << arguments.size();
+  if (arguments.size() <= 0)
+  {
+    getline(std::cin, input);
+    //std::cout << input;
+    return input;
+  }
   for(unsigned i = 0; i < scriptVariables.size(); ++i)
   {
     //std::cout << "varname*: " << scriptVariables[i].getVariableName() << " argument*: " << arguments[0]._syntax << '\n';
@@ -71,10 +95,12 @@ void inputMethod(std::vector<Variable>& scriptVariables,  std::vector<syntaxNode
       //std::cout << "input:";
       getline(std::cin, input);
       scriptVariables[i].setVariable(input);
-      break;
+      return input;
     }
   }
 }
+
+//VARIABLE METHODS
 void varMethod(std::vector<Variable>& scriptVariables, std::vector<syntaxNode> arguments)
 {
   std::vector<std::string> rhs;
@@ -82,4 +108,18 @@ void varMethod(std::vector<Variable>& scriptVariables, std::vector<syntaxNode> a
   //std::cout << "VARMETHOD ARG 2 : " << arguments[0]._syntax << '\n';
   Variable tempVar(arguments[0], arguments[0]._syntax, rhs);
   scriptVariables.push_back(tempVar);
+}
+
+void setMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
+{
+  for (std::vector<Variable>::iterator it = begin(scriptVariables); it != end(scriptVariables); ++it)
+  {
+    Variable * i = &(*it);
+    //std::cout << "VARNAME: " << i->getVariableName() << " ARGNAME: " << arguments[0]._syntax << '\n';
+    if (i->getVariableName() == arguments[0]._syntax)
+    {
+      i->setVariable(parseArguments(scriptVariables, 1, syntax, arguments, currentScope));
+      break;
+    }
+  }
 }

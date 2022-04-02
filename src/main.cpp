@@ -10,7 +10,7 @@
 
 */
 
-const std::string VERSION = "0.5.8";
+const std::string VERSION = "0.6.8";
 
 int main (int argc, char* argv[])
 {

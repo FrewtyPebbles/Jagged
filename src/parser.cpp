@@ -18,10 +18,12 @@ std::vector<std::string> grammarLookupTable =
   "VAR",
   "FIX",
   "DISC",
+  "set",
   "add",
   "subtract",
   "multiply",
-  "divide"
+  "divide",
+  "equal"
 };
 
 std::vector<std::string> literalLookupTable;

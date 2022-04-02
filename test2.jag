@@ -1,0 +1,20 @@
+VAR("userInput", "none");
+print("`nGuess a number: ");
+input("userInput");
+if(equal(userInput,"5"))
+  print("`nThats the right number!`n");
+  print("`nGuess another number: ");
+  input("userInput");
+  if(equal(userInput,"8"))
+    print("`nThats the right number again!`n");
+    print("`nGuess another number: ");
+    input("userInput");
+    if(equal(userInput,"6"))
+      print("`nThats the right number again!`n");
+      print("+1 point`n");
+      ^
+    print("+1 point`n");
+    ^
+  print("+1 point`n");
+  ^
+print("END`n");

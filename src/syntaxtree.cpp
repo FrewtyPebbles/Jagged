@@ -17,7 +17,7 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
   }
   else if (syntax._syntax == "input")
   {
-    inputMethod(scriptVariables, arguments);
+    return syntaxNode("literal", inputMethod(scriptVariables, arguments));
   }
   else if (syntax._syntax == "add")
   {
@@ -54,6 +54,14 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
   else if (syntax._syntax == "VAR")
   {
     varMethod(scriptVariables, arguments);
+  }
+  else if (syntax._syntax == "set")
+  {
+    setMethod(scriptVariables,syntax,arguments,currentScope);// sets arg 0 variable to arg 1
+  }
+  else if (syntax._syntax == "equal")
+  {
+    return syntaxNode("literal", equal(scriptVariables,syntax,arguments,currentScope));
   }
   return syntax;
 }
@@ -116,13 +124,20 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
 
 std::string itterateScopeRecursion(syntaxNode currentScope)
 {
+  if (currentScope._syntax == "if")//Check if syntax is a scope then recurse if statement true
+  {
+    if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
+    {
+      return currentScope._type;
+    }
+  }
   while (!currentScope._scope.empty())
   {
-    itterateScopeRecursion(currentScope._scope.front());
+    std::string lastScopeType = itterateScopeRecursion(currentScope._scope.front());
     parseSyntax(currentScope._scope.front(), itterateArguments(currentScope._scope.front()._arguments), currentScope._scope.front()._scope);
     currentScope._scope.pop();
   }
-  return currentScope._syntax;
+  return currentScope._type;
 }
 
 void  itterateScope(syntaxNode currentSyntax)
