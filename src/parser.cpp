@@ -42,7 +42,14 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
     syntaxNode nextSyntax;
     nextSyntax._syntax = grammar;
     grammarExists = false;
-    if (isArgument)
+    if (isQuoting)
+    {
+      //std::cout << "literal arguments \n";
+      literalLookupTable.push_back(grammar);
+      nextSyntax._type = "literal";
+      scopeStack.top()->_arguments.push_back(nextSyntax);
+    }
+    else if (isArgument)
     {
         for (std::string _scope : scopeLookupTable)
         {
@@ -74,23 +81,13 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
     }
     if (!grammarExists)
     {
-      if (isQuoting)
-      {
-        //std::cout << "literal arguments \n";
-        literalLookupTable.push_back(grammar);
-        nextSyntax._type = "literal";
-        scopeStack.top()->_arguments.push_back(nextSyntax);
-      }
-      else
-      {
-        //std::cout << "variable arguments1 \n";
-        variableLookupTable.push_back(grammar);
-        //std::cout << "variable arguments2 \n";
-        nextSyntax._type = "variable";
-        //std::cout << scopeStack.top()->_syntax << " variable arguments3 \n";
-        scopeStack.top()->_arguments.push_back(nextSyntax);
-        //std::cout << "variable arguments4 \n";
-      }
+      //std::cout << "variable arguments1 \n";
+      variableLookupTable.push_back(grammar);
+      //std::cout << "variable arguments2 \n";
+      nextSyntax._type = "variable";
+      //std::cout << scopeStack.top()->_syntax << " variable arguments3 \n";
+      scopeStack.top()->_arguments.push_back(nextSyntax);
+      //std::cout << "variable arguments4 \n";
     }
 
     //std::cout << "\nSCOPE ARGUMENTS: " << scopeStack.top()->_syntax << "\n";

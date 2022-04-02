@@ -15,6 +15,7 @@
 #include <string.h>
 #include <iomanip>
 #include <algorithm> //find()
+#include <memory>
 #pragma once
 
 /*pseudo
@@ -105,7 +106,7 @@ std::string equal(std::vector<Variable>& scriptVariables, syntaxNode syntax, std
 std::string less(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
 std::string greater(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
 std::string greaterOrEqual(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
-std::string greaterOrLess(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
+std::string lessOrEqual(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);
 
 //Standard library functions
 void printMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope);

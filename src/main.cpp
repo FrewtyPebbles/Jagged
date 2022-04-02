@@ -2,7 +2,8 @@
 
 /* TODO:
 
- - implement functions and variables.
+ - implement functions.
+ - garbage collection c++ and Jagged
 
  BUGS:
 
@@ -10,7 +11,7 @@
 
 */
 
-const std::string VERSION = "0.6.8";
+const std::string VERSION = "0.8.9";
 
 int main (int argc, char* argv[])
 {

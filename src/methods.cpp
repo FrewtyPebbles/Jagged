@@ -45,13 +45,13 @@ std::string multiplyNums(std::vector<Variable>& scriptVariables, syntaxNode synt
 std::string equal(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
 {return std::to_string(parseArguments(scriptVariables, 0, syntax, arguments, currentScope) == parseArguments(scriptVariables, 1, syntax, arguments, currentScope));}
 std::string less(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
-{}
+{return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) < strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
 std::string greater(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
-{}
+{return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) > strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
 std::string greaterOrEqual(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
-{}
-std::string greaterOrLess(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
-{}
+{return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) >= strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
+std::string lessOrEqual(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
+{return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) <= strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
 
 //MISC FUNCTIONS
 
@@ -114,7 +114,7 @@ void setMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::v
 {
   for (std::vector<Variable>::iterator it = begin(scriptVariables); it != end(scriptVariables); ++it)
   {
-    Variable * i = &(*it);
+    std::unique_ptr<Variable> i(&(*it));
     //std::cout << "VARNAME: " << i->getVariableName() << " ARGNAME: " << arguments[0]._syntax << '\n';
     if (i->getVariableName() == arguments[0]._syntax)
     {

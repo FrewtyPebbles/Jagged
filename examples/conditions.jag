@@ -1,0 +1,31 @@
+print("`n`n");
+input("number1")
+  VAR("number1", "input");
+  print("Enter a number: ");
+  ^
+print("`n`n");
+input("number2")
+  VAR("number2", "input");
+  print("Enter a second number: ");
+  ^
+print("`n`nCONDITIONS SATISFIED:`n`n");
+if(equal(number1,number2))
+  print("EQUAL");
+  print("`n`n");
+  ^
+if(greater(number1,number2))
+  print("GREATER");
+  print("`n`n");
+  ^
+if(less(number1,number2))
+  print("LESS");
+  print("`n`n");
+  ^
+if(greaterOrEqual(number1,number2))
+  print("GREATER OR EQUAL");
+  print("`n`n");
+  ^
+if(lessOrEqual(number1,number2))
+  print("LESS OR EQUAL");
+  print("`n`n");
+  ^

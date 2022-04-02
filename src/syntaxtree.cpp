@@ -11,57 +11,77 @@ syntaxNode::syntaxNode(std::string type, std::string syntax):_type(std::move(typ
 
 syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
 {
-  if (syntax._syntax == "print")
+  //std::cout << "type: " << syntax._type << "syntax: " << syntax._syntax << '\n';
+  if (syntax._type != "literal")
   {
-    printMethod(scriptVariables, syntax, arguments, currentScope);
-  }
-  else if (syntax._syntax == "input")
-  {
-    return syntaxNode("literal", inputMethod(scriptVariables, arguments));
-  }
-  else if (syntax._syntax == "add")
-  {
-    //std::cout << "add : " << addNums(syntax, arguments, currentScope) << '\n';
-    return syntaxNode("literal", addNums(scriptVariables, syntax, arguments, currentScope));
-  }
-  else if (syntax._syntax == "subtract")
-  {
-    return syntaxNode("literal", subtractNums(scriptVariables, syntax, arguments, currentScope));
-  }
-  else if (syntax._syntax == "multiply")
-  {
-    return syntaxNode("literal", multiplyNums(scriptVariables, syntax, arguments, currentScope));
-  }
-  else if (syntax._syntax == "divide")
-  {
-    return syntaxNode("literal", divideNums(scriptVariables, syntax, arguments, currentScope));
-  }
-  else if (syntax._syntax == "open")
-  {
-    std::cout << "Opened." << '\n';
+    if (syntax._syntax == "print")
+    {
+      printMethod(scriptVariables, syntax, arguments, currentScope);
+    }
+    else if (syntax._syntax == "input")
+    {
+      return syntaxNode("literal", inputMethod(scriptVariables, arguments));
+    }
+    else if (syntax._syntax == "add")
+    {
+      //std::cout << "add : " << addNums(syntax, arguments, currentScope) << '\n';
+      return syntaxNode("literal", addNums(scriptVariables, syntax, arguments, currentScope));
+    }
+    else if (syntax._syntax == "subtract")
+    {
+      return syntaxNode("literal", subtractNums(scriptVariables, syntax, arguments, currentScope));
+    }
+    else if (syntax._syntax == "multiply")
+    {
+      return syntaxNode("literal", multiplyNums(scriptVariables, syntax, arguments, currentScope));
+    }
+    else if (syntax._syntax == "divide")
+    {
+      return syntaxNode("literal", divideNums(scriptVariables, syntax, arguments, currentScope));
+    }
+    else if (syntax._syntax == "open")
+    {
+      std::cout << "Opened." << '\n';
 
-  }
-  else if (syntax._syntax == "close")
-  {
-    std::cout << "Closed." << '\n';
+    }
+    else if (syntax._syntax == "close")
+    {
+      std::cout << "Closed." << '\n';
 
-  }
-  else if (syntax._syntax == "jag")
-  {
-    std::cout << "Jagged." << '\n';
+    }
+    else if (syntax._syntax == "jag")
+    {
+      std::cout << "Jagged." << '\n';
 
-  }
-  else if (syntax._syntax == "VAR")
-  {
-    varMethod(scriptVariables, arguments);
-  }
-  else if (syntax._syntax == "set")
-  {
-    setMethod(scriptVariables,syntax,arguments,currentScope);// sets arg 0 variable to arg 1
-  }
-  else if (syntax._syntax == "equal")
-  {
-    return syntaxNode("literal", equal(scriptVariables,syntax,arguments,currentScope));
+    }
+    else if (syntax._syntax == "VAR")
+    {
+      varMethod(scriptVariables, arguments);
+    }
+    else if (syntax._syntax == "set")
+    {
+      setMethod(scriptVariables,syntax,arguments,currentScope);// sets arg 0 variable to arg 1
+    }
+    else if (syntax._syntax == "equal")
+    {
+      return syntaxNode("literal", equal(scriptVariables,syntax,arguments,currentScope));
+    }
+    else if (syntax._syntax == "greater")
+    {
+      return syntaxNode("literal", greater(scriptVariables,syntax,arguments,currentScope));
+    }
+    else if (syntax._syntax == "less")
+    {
+      return syntaxNode("literal", less(scriptVariables,syntax,arguments,currentScope));
+    }
+    else if (syntax._syntax == "lessOrEqual")
+    {
+      return syntaxNode("literal", lessOrEqual(scriptVariables,syntax,arguments,currentScope));
+    }
+    else if (syntax._syntax == "greaterOrEqual")
+    {
+      return syntaxNode("literal", greaterOrEqual(scriptVariables,syntax,arguments,currentScope));
+    }
   }
   return syntax;
 }
@@ -71,10 +91,17 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
   std::vector<syntaxNode> returnVec = {};
   for (std::vector<syntaxNode>::iterator it = begin(arguments); it != end(arguments); ++it)
   {
-    syntaxNode * i = &(*it);
+    syntaxNode * i = (&(*it));
     if (!i->_arguments.empty())
     {
-      returnVec.push_back(parseSyntax(*i, itterateArguments(i->_arguments), i->_scope));
+      if (i->_type != "literal")
+      {
+        returnVec.push_back(parseSyntax(*i, itterateArguments(i->_arguments), i->_scope));
+      }
+      else
+      {
+        returnVec.push_back(*i);
+      }
       /*for (syntaxNode j : argvec) {std::cout << "argvec: " << j._syntax << '\n';}
       for (syntaxNode j : arguments) {std::cout << "args: " << j._syntax << '\n';
       for (syntaxNode k : j._arguments) {std::cout << "args2: " << k._syntax << '\n';}}
