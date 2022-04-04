@@ -89,18 +89,17 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
 std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
 {
   std::vector<syntaxNode> returnVec = {};
-  for (std::vector<syntaxNode>::iterator it = begin(arguments); it != end(arguments); ++it)
+  for (std::size_t i = 0; i < arguments.size(); ++i)
   {
-    syntaxNode * i = (&(*it));
-    if (!i->_arguments.empty())
+    if (!arguments[i]._arguments.empty())
     {
-      if (i->_type != "literal")
+      if (arguments[i]._type != "literal")
       {
-        returnVec.push_back(parseSyntax(*i, itterateArguments(i->_arguments), i->_scope));
+        returnVec.push_back(parseSyntax(arguments[i], itterateArguments(arguments[i]._arguments), arguments[i]._scope));
       }
       else
       {
-        returnVec.push_back(*i);
+        returnVec.push_back(arguments[i]);
       }
       /*for (syntaxNode j : argvec) {std::cout << "argvec: " << j._syntax << '\n';}
       for (syntaxNode j : arguments) {std::cout << "args: " << j._syntax << '\n';
@@ -110,17 +109,17 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
     }
     else
     {
-      if (i->_scope.empty())//scope empty
+      if (arguments[i]._scope.empty())//scope empty
       {
-        if (i->_type == "literal")
+        if (arguments[i]._type == "literal")
         {
-          returnVec.push_back(*i);
+          returnVec.push_back(arguments[i]);
         }
-        else if (i->_type == "variable")
+        else if (arguments[i]._type == "variable")
         {
           for (Variable q : scriptVariables)
           {
-            if (q.getVariableName() == i->_syntax)
+            if (q.getVariableName() == arguments[i]._syntax)
             {
               //std::cout << " SPECIAL varname: " << q.getVariableName() << " SPECIAL syntax: " << i->_syntax << '\n' << " SPECIAL VALUE: " << q.getVariableValue()[0] << '\n';
               returnVec.push_back(syntaxNode("literal", q.getVariableValue()[0]));
@@ -131,16 +130,16 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
         }
         else
         {
-          returnVec.push_back(parseSyntax(*i, i->_arguments, i->_scope));
+          returnVec.push_back(parseSyntax(arguments[i], arguments[i]._arguments, arguments[i]._scope));
         }
         //std::cout << returnVec.back()._syntax <<" segf\n";
       }
       else
       {
         //scope not empty
-        while(!i->_scope.empty())
+        while(!arguments[i]._scope.empty())
         {
-          itterateScopeRecursion(*i);
+          itterateScopeRecursion(arguments[i]);
         }
         return returnVec;
       }

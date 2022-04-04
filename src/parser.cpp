@@ -309,5 +309,6 @@ int scanSource(std::string& source)
   scopeStack.top()._scope.push(syntaxNode("close"));*/
   //scopeStack.top()._scope.front()._scope.front()._scope.push(syntaxNode("Jag"));
   itterateScope(*scopeStack.top());
+  scopeStack.pop();
   return 0;
 }

@@ -13,8 +13,26 @@ if(equal(userInput,"5"))
       print("`nThats the right number again!`n");
       print("+1 point`n");
       ^
+    if(greater(userInput,"6"))
+      print("Too high.`n");
+      ^
+    if(less(userInput,"6"))
+      print("Too low.`n");
+      ^
     print("+1 point`n");
     ^
+  if(greater(userInput,"8"))
+    print("Too high.`n");
+    ^
+  if(less(userInput,"8"))
+    print("Too low.`n");
+    ^
   print("+1 point`n");
+  ^
+if(greater(userInput,"5"))
+  print("Too high.`n");
+  ^
+if(less(userInput,"5"))
+  print("Too low.`n");
   ^
 print("END`n");

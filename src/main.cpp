@@ -3,15 +3,12 @@
 /* TODO:
 
  - implement functions.
- - garbage collection c++ and Jagged
 
  BUGS:
 
- - Variables must be referenced via string literal when writing to them.
-
 */
 
-const std::string VERSION = "0.8.9";
+const std::string VERSION = "0.8.10";
 
 int main (int argc, char* argv[])
 {
