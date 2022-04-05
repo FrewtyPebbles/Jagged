@@ -6,9 +6,12 @@
 
  BUGS:
 
+ - conditions.jag throws segmentation fault after first if statement.
+ - recursive arguments dont work, problem with literals?
+
 */
 
-const std::string VERSION = "0.8.10";
+const std::string VERSION = "0.8.11";
 
 int main (int argc, char* argv[])
 {

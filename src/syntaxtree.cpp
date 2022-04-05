@@ -9,9 +9,10 @@ std::vector<syntaxNode> functions;
 syntaxNode::syntaxNode(){}
 syntaxNode::syntaxNode(std::string type, std::string syntax):_type(std::move(type)),_syntax(std::move(syntax)){}
 
-syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::queue<syntaxNode> & currentScope)
+syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {
-  //std::cout << "type: " << syntax._type << "syntax: " << syntax._syntax << '\n';
+  //std::cout << "syntax: " << syntax._syntax << '\n';
+  //for (auto i : arguments){std::cout << " - args: " << i._syntax << '\n';}
   if (syntax._type != "literal")
   {
     if (syntax._syntax == "print")
@@ -24,7 +25,7 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     }
     else if (syntax._syntax == "add")
     {
-      //std::cout << "add : " << addNums(syntax, arguments, currentScope) << '\n';
+      std::cout << "add : " << addNums(scriptVariables, syntax, arguments, currentScope) << '\n';
       return syntaxNode("literal", addNums(scriptVariables, syntax, arguments, currentScope));
     }
     else if (syntax._syntax == "subtract")
@@ -147,27 +148,47 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
   }
   return returnVec;
 }
-
+//Only execute elses if the previous syntax in the scope is an if or else if and it evaluated to false.
 std::string itterateScopeRecursion(syntaxNode currentScope)
 {
   if (currentScope._syntax == "if")//Check if syntax is a scope then recurse if statement true
   {
     if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
     {
+      //currentScope.scopeIndex = 0;
       return currentScope._type;
     }
   }
-  while (!currentScope._scope.empty())
+  else if (currentScope._syntax == "elif")//Check if syntax is a scope then recurse if statement true
   {
-    std::string lastScopeType = itterateScopeRecursion(currentScope._scope.front());
-    parseSyntax(currentScope._scope.front(), itterateArguments(currentScope._scope.front()._arguments), currentScope._scope.front()._scope);
-    currentScope._scope.pop();
+    if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
+    {
+      //currentScope.scopeIndex = 0;
+      return currentScope._type;
+    }
   }
+  else if (currentScope._syntax == "el")//Check if syntax is a scope then recurse if statement true
+  {
+    if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
+    {
+      //currentScope.scopeIndex = 0;
+      return currentScope._type;
+    }
+  }
+  while (currentScope.scopeIndex < currentScope._scope.size())
+  {
+    std::string lastScopeType = itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex]);
+    parseSyntax(currentScope._scope[currentScope.scopeIndex], itterateArguments(currentScope._scope[currentScope.scopeIndex]._arguments), currentScope._scope[currentScope.scopeIndex]._scope);
+    ++currentScope.scopeIndex;
+    //currentScope._scope.pop();
+  }
+  //currentScope.scopeIndex = 0;
   return currentScope._type;
 }
 
 void  itterateScope(syntaxNode currentSyntax)
 {
+  currentSyntax.scopeIndex = 0;
   itterateScopeRecursion(currentSyntax);
   return;
 }

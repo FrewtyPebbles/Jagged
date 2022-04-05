@@ -69,12 +69,12 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
       for (std::string _scope : scopeLookupTable)
       {
         //std::cout << "scope scope \n";
-        if (_scope == grammar) {nextSyntax._type = "scope";grammarExists = true;scopeStack.top()->_scope.push(nextSyntax); break;}
+        if (_scope == grammar) {nextSyntax._type = "scope";grammarExists = true;scopeStack.top()->_scope.push_back(nextSyntax); break;}
       }
       for (std::string _grammar : grammarLookupTable)
       {
         //std::cout << "grammar scope \n";
-        if (_grammar == grammar) {nextSyntax._type = "grammar";grammarExists = true;scopeStack.top()->_scope.push(nextSyntax);break;}
+        if (_grammar == grammar) {nextSyntax._type = "grammar";grammarExists = true;scopeStack.top()->_scope.push_back(nextSyntax);break;}
       }
       //if grammar does not exist
 
@@ -115,7 +115,7 @@ int scanSource(std::string& source)
   char lastChar;
   for(char character : source)
   {
-    if (lastChar == '`')
+    if (lastChar == '`')//ESCAPES
     {
       if (character == 'n') keyword += '\n';
       else if (character == 't') keyword += '\t';

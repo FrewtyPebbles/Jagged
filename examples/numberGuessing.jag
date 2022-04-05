@@ -36,13 +36,13 @@ if(equal(userInput,"5"))
 
   ^
 
-  if(greater(userInput,"8"))
+  elif(greater(userInput,"8"))
 
     print("Too high.`n");
 
   ^
 
-  if(less(userInput,"8"))
+  el(less(userInput,"8"))
 
     print("Too low.`n");
 
@@ -51,13 +51,13 @@ if(equal(userInput,"5"))
 
 ^
 
-if(greater(userInput,"5"))
+elif(greater(userInput,"5"))
 
   print("Too high.`n");
 
 ^
 
-if(less(userInput,"5"))
+el(less(userInput,"5"))
 
   print("Too low.`n");
 
