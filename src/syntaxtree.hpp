@@ -37,6 +37,9 @@ public:
   std::vector<syntaxNode>  _arguments;  // arguments for the scope ex: (arg1, arg2, arg3)
   std::vector<syntaxNode> _scope;  // the queue of syntax nodes within the scope of this syntaxNode -- if it is empy it returns to the parent syntax node.
   std::size_t scopeIndex = 0;
+  std::string _data;
+  syntaxNode* _parent;
+  syntaxNode* _backNeighbor;
 };
 
 syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);  //parse the current syntax
@@ -108,7 +111,8 @@ std::string less(std::vector<Variable>& scriptVariables, syntaxNode syntax, std:
 std::string greater(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 std::string greaterOrEqual(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 std::string lessOrEqual(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
-
+//User Functions
+std::string functionInstantiateMethod(syntaxNode Instantiation, std::vector<syntaxNode>& functions, std::vector<syntaxNode> arguments);
 //Standard library functions
 void printMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 std::string inputMethod(std::vector<Variable>& scriptVariables, std::vector<syntaxNode> arguments );

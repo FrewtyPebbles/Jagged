@@ -1,0 +1,60 @@
+exec("plus")
+  print("Adding the numbers 5 and 2...`n");
+  print(" 4 + 2 = ", add("4","2"),"`n");
+  VAR("plusInput","test");
+  print("Choose a number:");
+  input("plusInput");
+  print(" 4 + ", plusInput, " = ", add("4",plusInput),"`n");
+^
+exec("minus")
+  print("Subtracting the numbers 5 and 2...`n");
+  print(" 4 - 2 = ", subtract("4","2"),"`n");
+  VAR("minusInput","test");
+  print("Choose a number:");
+  input("minusInput");
+  print(" 4 - ", minusInput, " = ", subtract("4",minusInput),"`n");
+^
+exec("times")
+  print("This is function 3`n");
+^
+exec("fraction")
+  print("This is function 4`n");
+^
+
+VAR("userInput", input)
+  print("enter a number from 1 to 4:");
+^
+print("function # ", userInput, " :`n");
+
+if (equal(userInput, "1"))
+  plus;
+^
+if (equal(userInput, "2"))
+  minus;
+^
+if (equal(userInput, "3"))
+  times;
+^
+if (equal(userInput, "4"))
+  fraction;
+^
+
+print("Recursion time! (Set function might still be broken, sorry!)`n");
+print("Input a number value:");
+VAR("value",input);
+
+exec("recursionExample")
+  print("`nEnter the ammount that you would like to add:");
+  set("value", add(value, input));
+  print("value added`n");
+  print("Would you like to add to ", value, " again (y/n):");
+  input("userInput");
+  if (equal(userInput, "y"))
+    recursionExample;
+  ^
+  if (equal(userInput, "n"))
+    print("Thanks for recursing!`n");
+  ^
+^
+
+recursionExample;

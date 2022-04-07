@@ -101,7 +101,22 @@ std::string inputMethod(std::vector<Variable>& scriptVariables,  std::vector<syn
     }
   }
 }
-
+//FUNCTION METHODS
+std::string functionInstantiateMethod(syntaxNode Instantiation, std::vector<syntaxNode>& functions, std::vector<syntaxNode> arguments)
+{
+  //return if function already instantiated so multiples arent created
+  for(syntaxNode i : functions)
+  {
+    if (i._syntax == arguments[0]._syntax) return "RETURN_VALUE";
+  }
+  syntaxNode newFunction;
+  newFunction._type = "scope";
+  newFunction._syntax = arguments[0]._syntax;
+  newFunction._arguments = Instantiation._arguments;
+  newFunction._scope = Instantiation._scope;
+  functions.push_back(newFunction);
+  return arguments[0]._syntax;
+}
 //VARIABLE METHODS
 void varMethod(std::vector<Variable>& scriptVariables, std::vector<syntaxNode> arguments)
 {

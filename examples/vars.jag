@@ -1,0 +1,5 @@
+print("Set the value:");
+VAR("test", input);
+print("The current value is : ", test, "`nEnter a number to add to it : ");
+set("test", add(test, input));
+print("The sum is ", test, ".`n");

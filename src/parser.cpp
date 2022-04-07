@@ -4,10 +4,10 @@ std::vector<std::string> scopeLookupTable =
 {
   "exec",
   "if",
-  "ef",
-  "el",
-  "compute"
+  "elif",
+  "el"
 };
+
 std::vector<std::string> grammarLookupTable =
 {
   "print",
@@ -47,6 +47,9 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
       //std::cout << "literal arguments \n";
       literalLookupTable.push_back(grammar);
       nextSyntax._type = "literal";
+
+      nextSyntax._parent = scopeStack.top();
+      if (!scopeStack.top()->_scope.empty())nextSyntax._backNeighbor = &scopeStack.top()->_scope.back();//bug
       scopeStack.top()->_arguments.push_back(nextSyntax);
     }
     else if (isArgument)
@@ -54,12 +57,19 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
         for (std::string _scope : scopeLookupTable)
         {
           //std::cout << "scope arguments \n";
-          if (_scope == grammar) {nextSyntax._type = "scope";grammarExists = true;scopeStack.top()->_arguments.push_back(nextSyntax);break;}
+          if (_scope == grammar)
+          {
+            if (!scopeStack.top()->_scope.empty())nextSyntax._backNeighbor = &scopeStack.top()->_scope.back();//bug
+            nextSyntax._type = "scope";grammarExists = true;nextSyntax._parent = scopeStack.top();scopeStack.top()->_arguments.push_back(nextSyntax);break;}
         }
         for (std::string _grammar : grammarLookupTable)
         {
           //std::cout << "grammar arguments \n";
-          if (_grammar == grammar) {nextSyntax._type = "grammar";grammarExists = true;scopeStack.top()->_arguments.push_back(nextSyntax);break;}
+          if (_grammar == grammar)
+          {
+            if (!scopeStack.top()->_scope.empty())nextSyntax._backNeighbor = &scopeStack.top()->_scope.back();//bug
+            nextSyntax._type = "grammar";grammarExists = true;nextSyntax._parent = scopeStack.top();scopeStack.top()->_arguments.push_back(nextSyntax);break;
+          }
         }
       //If grammar does not exist
 
@@ -69,25 +79,50 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
       for (std::string _scope : scopeLookupTable)
       {
         //std::cout << "scope scope \n";
-        if (_scope == grammar) {nextSyntax._type = "scope";grammarExists = true;scopeStack.top()->_scope.push_back(nextSyntax); break;}
+        if (_scope == grammar)
+        {
+          if (!scopeStack.top()->_scope.empty())nextSyntax._backNeighbor = &scopeStack.top()->_scope.back();//bug
+          nextSyntax._type = "scope";grammarExists = true;nextSyntax._parent = scopeStack.top();scopeStack.top()->_scope.push_back(nextSyntax); break;
+        }
       }
       for (std::string _grammar : grammarLookupTable)
       {
         //std::cout << "grammar scope \n";
-        if (_grammar == grammar) {nextSyntax._type = "grammar";grammarExists = true;scopeStack.top()->_scope.push_back(nextSyntax);break;}
+        if (_grammar == grammar)
+        {
+          if (!scopeStack.top()->_scope.empty())nextSyntax._backNeighbor = &scopeStack.top()->_scope.back();//bug
+          nextSyntax._type = "grammar";grammarExists = true;nextSyntax._parent = scopeStack.top();scopeStack.top()->_scope.push_back(nextSyntax);break;
+        }
       }
       //if grammar does not exist
 
     }
     if (!grammarExists)
     {
-      //std::cout << "variable arguments1 \n";
-      variableLookupTable.push_back(grammar);
-      //std::cout << "variable arguments2 \n";
-      nextSyntax._type = "variable";
-      //std::cout << scopeStack.top()->_syntax << " variable arguments3 \n";
-      scopeStack.top()->_arguments.push_back(nextSyntax);
-      //std::cout << "variable arguments4 \n";
+      if (isArgument)
+      {
+        //std::cout << "variable arguments1 \n";
+        variableLookupTable.push_back(grammar);
+        //std::cout << "variable arguments2 \n";
+        nextSyntax._type = "variable";
+        //std::cout << scopeStack.top()->_syntax << " variable arguments3 \n";
+        nextSyntax._parent = scopeStack.top();
+        if (!scopeStack.top()->_scope.empty())nextSyntax._backNeighbor = &scopeStack.top()->_scope.back();//bug
+        scopeStack.top()->_arguments.push_back(nextSyntax);
+        //std::cout << "variable arguments4 \n";
+      }
+      else
+      {
+        //std::cout << "variable arguments1 \n";
+        variableLookupTable.push_back(grammar);
+        //std::cout << "variable arguments2 \n";
+        nextSyntax._type = "scope";
+        //std::cout << scopeStack.top()->_syntax << " variable arguments3 \n";
+        nextSyntax._parent = scopeStack.top();
+        if (!scopeStack.top()->_scope.empty())nextSyntax._backNeighbor = &scopeStack.top()->_scope.back();//bug
+        scopeStack.top()->_scope.push_back(nextSyntax);
+        //std::cout << "variable arguments4 \n";
+      }
     }
 
     //std::cout << "\nSCOPE ARGUMENTS: " << scopeStack.top()->_syntax << "\n";

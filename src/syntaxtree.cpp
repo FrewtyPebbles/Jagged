@@ -8,7 +8,6 @@ std::vector<syntaxNode> functions;
 
 syntaxNode::syntaxNode(){}
 syntaxNode::syntaxNode(std::string type, std::string syntax):_type(std::move(type)),_syntax(std::move(syntax)){}
-
 syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {
   //std::cout << "syntax: " << syntax._syntax << '\n';
@@ -25,7 +24,7 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     }
     else if (syntax._syntax == "add")
     {
-      std::cout << "add : " << addNums(scriptVariables, syntax, arguments, currentScope) << '\n';
+      //std::cout << "add : " << addNums(scriptVariables, syntax, arguments, currentScope) << '\n';
       return syntaxNode("literal", addNums(scriptVariables, syntax, arguments, currentScope));
     }
     else if (syntax._syntax == "subtract")
@@ -82,6 +81,28 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     else if (syntax._syntax == "greaterOrEqual")
     {
       return syntaxNode("literal", greaterOrEqual(scriptVariables,syntax,arguments,currentScope));
+    }
+    else if (syntax._syntax == "exec")
+    {
+      return syntaxNode("literal", functionInstantiateMethod(syntax, functions, arguments));
+    }
+    else if (syntax._syntax == "if")
+    {return syntax;}
+    else if (syntax._syntax == "elif")
+    {return syntax;}
+    else if (syntax._syntax == "el")
+    {return syntax;}
+    else
+    {
+      for(syntaxNode i : functions)
+      {
+        //std::cout << "Function:" << syntax._syntax << '\n';
+        if (i._syntax == syntax._syntax)
+        {
+          //std::cout << "Function:" << i._syntax << '\n';
+          itterateScope(i);
+        }
+      }
     }
   }
   return syntax;
@@ -151,25 +172,30 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
 //Only execute elses if the previous syntax in the scope is an if or else if and it evaluated to false.
 std::string itterateScopeRecursion(syntaxNode currentScope)
 {
+  //SCOPES
   if (currentScope._syntax == "if")//Check if syntax is a scope then recurse if statement true
   {
+    currentScope._data = "none";
     if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
     {
-      //currentScope.scopeIndex = 0;
+      currentScope._data = "trigger";
       return currentScope._type;
     }
   }
   else if (currentScope._syntax == "elif")//Check if syntax is a scope then recurse if statement true
   {
-    if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
+    currentScope._data = "none";
+    if (currentScope._backNeighbor->_data == "trigger" || itterateArguments(currentScope._arguments)[0]._syntax != "1")
     {
+      currentScope._data = "trigger";
       //currentScope.scopeIndex = 0;
       return currentScope._type;
     }
   }
   else if (currentScope._syntax == "el")//Check if syntax is a scope then recurse if statement true
   {
-    if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
+    //std::cout << currentScope._backNeighbor->_syntax;
+    if (currentScope._backNeighbor->_data == "trigger")
     {
       //currentScope.scopeIndex = 0;
       return currentScope._type;
@@ -177,7 +203,27 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
   }
   while (currentScope.scopeIndex < currentScope._scope.size())
   {
-    std::string lastScopeType = itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex]);
+    if (currentScope._syntax == "exec")//Check if syntax is a scope then recurse if statement true
+    {
+      bool functionInstantiated = false;
+      for(syntaxNode i : functions)
+      {
+        if (i._syntax == currentScope._arguments[0]._syntax)
+        {
+          functionInstantiated = true;
+          break;
+        }
+      }
+      if (functionInstantiated == false)
+      {
+        parseSyntax(currentScope, itterateArguments(currentScope._arguments), currentScope._scope);
+        ++currentScope.scopeIndex;
+        //std::cout <<"Functions : \n";
+        //for (auto i : functions){std::cout << i._scope[0]._syntax << '\n';}
+        return currentScope._type;
+      }
+    }
+    itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex]);
     parseSyntax(currentScope._scope[currentScope.scopeIndex], itterateArguments(currentScope._scope[currentScope.scopeIndex]._arguments), currentScope._scope[currentScope.scopeIndex]._scope);
     ++currentScope.scopeIndex;
     //currentScope._scope.pop();
