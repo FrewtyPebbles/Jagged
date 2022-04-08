@@ -31,15 +31,15 @@ class syntaxNode
 {
 public:
   syntaxNode();
-  syntaxNode(std::string type, std::string syntax);
+  syntaxNode(std::string type, std::string syntax, std::string data);
   std::string _type;
   std::string _syntax;  // the syntax to be parsed in the current node
+  std::string _data;
   std::vector<syntaxNode>  _arguments;  // arguments for the scope ex: (arg1, arg2, arg3)
   std::vector<syntaxNode> _scope;  // the queue of syntax nodes within the scope of this syntaxNode -- if it is empy it returns to the parent syntax node.
   std::size_t scopeIndex = 0;
-  std::string _data;
-  syntaxNode* _parent;
-  syntaxNode* _backNeighbor;
+  syntaxNode* _parent = nullptr;
+  syntaxNode* _backNeighbor = nullptr;
 };
 
 syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);  //parse the current syntax

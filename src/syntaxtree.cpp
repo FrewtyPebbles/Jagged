@@ -7,7 +7,7 @@ std::vector<discVariable> scriptDiscVariables;
 std::vector<syntaxNode> functions;
 
 syntaxNode::syntaxNode(){}
-syntaxNode::syntaxNode(std::string type, std::string syntax):_type(std::move(type)),_syntax(std::move(syntax)){}
+syntaxNode::syntaxNode(std::string type, std::string syntax, std::string data):_type(std::move(type)),_syntax(std::move(syntax)),_data(std::move(data)){}
 syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {
   //std::cout << "syntax: " << syntax._syntax << '\n';
@@ -20,24 +20,24 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     }
     else if (syntax._syntax == "input")
     {
-      return syntaxNode("literal", inputMethod(scriptVariables, arguments));
+      return syntaxNode("literal", inputMethod(scriptVariables, arguments),syntax._syntax);
     }
     else if (syntax._syntax == "add")
     {
       //std::cout << "add : " << addNums(scriptVariables, syntax, arguments, currentScope) << '\n';
-      return syntaxNode("literal", addNums(scriptVariables, syntax, arguments, currentScope));
+      return syntaxNode("literal", addNums(scriptVariables, syntax, arguments, currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "subtract")
     {
-      return syntaxNode("literal", subtractNums(scriptVariables, syntax, arguments, currentScope));
+      return syntaxNode("literal", subtractNums(scriptVariables, syntax, arguments, currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "multiply")
     {
-      return syntaxNode("literal", multiplyNums(scriptVariables, syntax, arguments, currentScope));
+      return syntaxNode("literal", multiplyNums(scriptVariables, syntax, arguments, currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "divide")
     {
-      return syntaxNode("literal", divideNums(scriptVariables, syntax, arguments, currentScope));
+      return syntaxNode("literal", divideNums(scriptVariables, syntax, arguments, currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "open")
     {
@@ -64,27 +64,27 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     }
     else if (syntax._syntax == "equal")
     {
-      return syntaxNode("literal", equal(scriptVariables,syntax,arguments,currentScope));
+      return syntaxNode("literal", equal(scriptVariables,syntax,arguments,currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "greater")
     {
-      return syntaxNode("literal", greater(scriptVariables,syntax,arguments,currentScope));
+      return syntaxNode("literal", greater(scriptVariables,syntax,arguments,currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "less")
     {
-      return syntaxNode("literal", less(scriptVariables,syntax,arguments,currentScope));
+      return syntaxNode("literal", less(scriptVariables,syntax,arguments,currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "lessOrEqual")
     {
-      return syntaxNode("literal", lessOrEqual(scriptVariables,syntax,arguments,currentScope));
+      return syntaxNode("literal", lessOrEqual(scriptVariables,syntax,arguments,currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "greaterOrEqual")
     {
-      return syntaxNode("literal", greaterOrEqual(scriptVariables,syntax,arguments,currentScope));
+      return syntaxNode("literal", greaterOrEqual(scriptVariables,syntax,arguments,currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "exec")
     {
-      return syntaxNode("literal", functionInstantiateMethod(syntax, functions, arguments));
+      return syntaxNode("literal", functionInstantiateMethod(syntax, functions, arguments),syntax._syntax);
     }
     else if (syntax._syntax == "if")
     {return syntax;}
@@ -144,7 +144,7 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
             if (q.getVariableName() == arguments[i]._syntax)
             {
               //std::cout << " SPECIAL varname: " << q.getVariableName() << " SPECIAL syntax: " << i->_syntax << '\n' << " SPECIAL VALUE: " << q.getVariableValue()[0] << '\n';
-              returnVec.push_back(syntaxNode("literal", q.getVariableValue()[0]));
+              returnVec.push_back(syntaxNode("literal", q.getVariableValue()[0],arguments[i]._syntax));
               break;
             }
           }
@@ -175,27 +175,32 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
   //SCOPES
   if (currentScope._syntax == "if")//Check if syntax is a scope then recurse if statement true
   {
-    currentScope._data = "none";
+    currentScope._data = "true";
     if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
     {
-      currentScope._data = "trigger";
+      currentScope._data = "fail";
       return currentScope._type;
     }
   }
   else if (currentScope._syntax == "elif")//Check if syntax is a scope then recurse if statement true
   {
-    currentScope._data = "none";
-    if (currentScope._backNeighbor->_data == "trigger" || itterateArguments(currentScope._arguments)[0]._syntax != "1")
+    currentScope._data = "true";
+    //std::cout << currentScope._backNeighbor->_data << " : data\n";
+    if (currentScope._backNeighbor->_data == "triggered" || currentScope._backNeighbor->_data == "true")
     {
-      currentScope._data = "trigger";
-      //currentScope.scopeIndex = 0;
+      currentScope._data = "triggered";
+      return currentScope._type;
+    }
+    else if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
+    {
+      currentScope._data = "fail";
       return currentScope._type;
     }
   }
   else if (currentScope._syntax == "el")//Check if syntax is a scope then recurse if statement true
   {
     //std::cout << currentScope._backNeighbor->_syntax;
-    if (currentScope._backNeighbor->_data == "trigger")
+    if (currentScope._backNeighbor->_data == "triggered" || currentScope._backNeighbor->_data != "true")
     {
       //currentScope.scopeIndex = 0;
       return currentScope._type;

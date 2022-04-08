@@ -32,6 +32,7 @@ std::vector<std::string> variableLookupTable;
 
 bool grammarExists = false;
 bool isQuoting = false;
+bool isComment = false;
 unsigned argScope = 0;
 
 void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool isArgument)
@@ -80,7 +81,7 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
       {
         //std::cout << "scope scope \n";
         if (_scope == grammar)
-        {
+        {//std::cout << scopeStack.top()->_scope.back()._syntax << " -- " << nextSyntax._syntax << ";\n";
           if (!scopeStack.top()->_scope.empty())nextSyntax._backNeighbor = &scopeStack.top()->_scope.back();//bug
           nextSyntax._type = "scope";grammarExists = true;nextSyntax._parent = scopeStack.top();scopeStack.top()->_scope.push_back(nextSyntax); break;
         }
@@ -146,7 +147,7 @@ int scanSource(std::string& source)
   bool isArgument = false;
 
   std::stack<syntaxNode*> scopeStack = {};
-  scopeStack.push(new syntaxNode("global","global"));
+  scopeStack.push(new syntaxNode("global","global","global"));
   char lastChar;
   for(char character : source)
   {
@@ -162,6 +163,14 @@ int scanSource(std::string& source)
       lastChar = character;
       continue;
     }
+    if (character == '#' && !isQuoting && !isComment)
+    {
+      isComment = true;
+    }
+    else if ((character == '\n' || character == '#') && isComment && !isQuoting)
+    {
+      isComment = false;
+    }
     if (character == '"')
     {
       //check quoting.
@@ -174,7 +183,7 @@ int scanSource(std::string& source)
       }
       isQuoting = !isQuoting;
     }
-    else if (!isQuoting)
+    else if (!isQuoting && !isComment)
     {
       switch (character)
       {

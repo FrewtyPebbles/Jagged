@@ -6,13 +6,6 @@
 
  BUGS:
 
- -=***=- 'set' stl function breaks script.  Output:
- (ERROR:double free or corruption,
-  ERROR:
-terminate called after throwing an instance of 'std::logic_error'
- what(): basic_string::_M_construct null not valid
-Aborted (core dumped))
-
 -=***=- elif still does not work, neither does else.
 
 -=***=- user functions return at the end of their scope without
@@ -20,7 +13,7 @@ a return keyword.
 
 */
 
-const std::string VERSION = "0.9.13";
+const std::string VERSION = "0.9.14";
 
 int main (int argc, char* argv[])
 {
