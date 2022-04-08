@@ -15,10 +15,20 @@ exec("minus")
   print(" 4 - ", minusInput, " = ", subtract("4",minusInput),"`n");
 ^
 exec("times")
-  print("This is function 3`n");
+  print("Multiplying the numbers 5 and 2...`n");
+  print(" 4 * 2 = ", multiply("4","2"),"`n");
+  VAR("timesInput","test");
+  print("Choose a number:");
+  input("timesInput");
+  print(" 4 * ", timesInput, " = ", multiply("4",timesInput),"`n");
 ^
 exec("fraction")
-  print("This is function 4`n");
+  print("Dividing the numbers 5 and 2...`n");
+  print(" 4 / 2 = ", divide("4","2"),"`n");
+  VAR("fractionInput","test");
+  print("Choose a number:");
+  input("fractionInput");
+  print(" 4 / ", fractionInput, " = ", multiply("4", fractionInput),"`n");
 ^
 
 VAR("userInput", input)
@@ -44,17 +54,14 @@ print("Input a number value:");
 VAR("value",input);
 
 exec("recursionExample")
-  print("`nEnter the ammount that you would like to add:");
-  set("value", add(value, input));
-  print("value added`n");
+  print("`nEnter the ammount that you would like to add : ");
+  print("value added to ", value, " = ", add(value, input), "`n");
   print("Would you like to add to ", value, " again (y/n):");
   input("userInput");
   if (equal(userInput, "y"))
     recursionExample;
   ^
-  if (equal(userInput, "n"))
-    print("Thanks for recursing!`n");
-  ^
 ^
 
 recursionExample;
+print("Thanks for recursing!`n");

@@ -20,7 +20,7 @@ a return keyword.
 
 */
 
-const std::string VERSION = "0.9.12";
+const std::string VERSION = "0.9.13";
 
 int main (int argc, char* argv[])
 {

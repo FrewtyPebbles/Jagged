@@ -131,11 +131,11 @@ void setMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::v
 {
   for (std::vector<Variable>::iterator it = begin(scriptVariables); it != end(scriptVariables); ++it)
   {
-    std::unique_ptr<Variable> i(&(*it));
-    //std::cout << "VARNAME: " << i->getVariableName() << " ARGNAME: " << arguments[0]._syntax << '\n';
+    Variable * i(&(*it));
     if (i->getVariableName() == arguments[0]._syntax)
     {
-      i->setVariable(parseArguments(scriptVariables, 1, syntax, arguments, currentScope));
+      std::cout << "VARNAME: " << i->getVariableName() << " ARGNAME: " << arguments[0]._syntax << '\n';
+      i->setVariable(parseArguments(scriptVariables, 2, syntax, arguments, currentScope));
       break;
     }
   }
