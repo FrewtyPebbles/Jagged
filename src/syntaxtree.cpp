@@ -185,7 +185,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
   else if (currentScope._syntax == "elif")//Check if syntax is a scope then recurse if statement true
   {
     currentScope._data = "true";
-    //std::cout << currentScope._backNeighbor->_data << " : data\n";
+    std::cout << currentScope._backNeighbor->_data << " : data\n";
     if (currentScope._backNeighbor->_data == "triggered" || currentScope._backNeighbor->_data == "true")
     {
       currentScope._data = "triggered";

@@ -40,7 +40,7 @@ std::string divideNums(std::vector<Variable>& scriptVariables, syntaxNode syntax
 std::string multiplyNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) * strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
 
-//COMPARISON return 1 or 0
+//COMPARISON  return 1 or 0
 
 std::string equal(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {//std::cout << " arg 0 : " << parseArguments(scriptVariables, 0, syntax, arguments, currentScope) << " arg 1 : " << parseArguments(scriptVariables, 1, syntax, arguments, currentScope) << "\n";
