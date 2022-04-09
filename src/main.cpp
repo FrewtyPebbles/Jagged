@@ -6,10 +6,7 @@
 
  BUGS:
 
--=***=- elif still does not work, neither does else.
-
--=***=- user functions return at the end of their scope without
-a return keyword.
+-=***=- DO NOT RUN UNTILL MEMORY BUG IS FIXED IN _backneighbor!
 
 */
 
