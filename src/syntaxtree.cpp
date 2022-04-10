@@ -176,7 +176,7 @@ void insertConditionFlag(std::string flag)
 {
   if (conditionDepthFlag.capacity() > scopeDepth)
   {
-    conditionDepthFlag.[scopeDepth] = flag;
+    conditionDepthFlag[scopeDepth] = flag;
   }
   else
   {
