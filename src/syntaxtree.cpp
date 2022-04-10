@@ -174,6 +174,7 @@ std::vector<std::string> conditionDepthFlag;
 unsigned scopeDepth = 0;
 void insertConditionFlag(std::string flag)
 {
+  std::cout << conditionDepthFlag.capacity() << " = capacity" << scopeDepth << " = scopeDepth\n";
   if (conditionDepthFlag.capacity() > scopeDepth)
   {
     conditionDepthFlag[scopeDepth] = flag;
@@ -186,7 +187,6 @@ void insertConditionFlag(std::string flag)
 std::string itterateScopeRecursion(syntaxNode currentScope)
 {
   //SCOPES
-  ++scopeDepth;
   if (currentScope._syntax == "if")//Check if syntax is a scope then recurse if statement true
   {
     insertConditionFlag("true");
@@ -244,6 +244,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
         return currentScope._type;
       }
     }
+    ++scopeDepth;
     itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex]);
     parseSyntax(currentScope._scope[currentScope.scopeIndex], itterateArguments(currentScope._scope[currentScope.scopeIndex]._arguments), currentScope._scope[currentScope.scopeIndex]._scope);
     ++currentScope.scopeIndex;
