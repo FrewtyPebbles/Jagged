@@ -15,19 +15,19 @@ if(equal(number1,number2))
   print("EQUAL");
   print("`n`n");
 ^
-if(greater(number1,number2))
+elif(greater(number1,number2))
   print("GREATER");
   print("`n`n");
 ^
-if(less(number1,number2))
+elif(less(number1,number2))
   print("LESS");
   print("`n`n");
 ^
-if(greaterOrEqual(number1,number2))
+elif(greaterOrEqual(number1,number2))
   print("GREATER OR EQUAL");
   print("`n`n");
 ^
-if(lessOrEqual(number1,number2))
+elif(lessOrEqual(number1,number2))
   print("LESS OR EQUAL");
   print("`n`n");
 ^

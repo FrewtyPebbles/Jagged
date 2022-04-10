@@ -170,39 +170,56 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
   return returnVec;
 }
 //Only execute elses if the previous syntax in the scope is an if or else if and it evaluated to false.
+std::vector<std::string> conditionDepthFlag;
+unsigned scopeDepth = 0;
+void insertConditionFlag(std::string flag)
+{
+  if (conditionDepthFlag.capacity() > scopeDepth)
+  {
+    conditionDepthFlag.at(scopeDepth) = flag;
+  }
+  else
+  {
+    conditionDepthFlag.push_back(flag);
+  }
+}
 std::string itterateScopeRecursion(syntaxNode currentScope)
 {
   //SCOPES
+  ++scopeDepth;
   if (currentScope._syntax == "if")//Check if syntax is a scope then recurse if statement true
   {
-    currentScope._data = "true";
+    insertConditionFlag("true");
     if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
     {
-      currentScope._data = "fail";
+      insertConditionFlag("fail");
+      --scopeDepth;
       return currentScope._type;
     }
   }
   else if (currentScope._syntax == "elif")//Check if syntax is a scope then recurse if statement true
   {
-    currentScope._data = "true";
-    std::cout << currentScope._backNeighbor->_data << " : data\n";
-    if (currentScope._backNeighbor->_data == "triggered" || currentScope._backNeighbor->_data == "true")
+    if (conditionDepthFlag[scopeDepth] == "triggered" || conditionDepthFlag[scopeDepth] == "true")
     {
-      currentScope._data = "triggered";
+      insertConditionFlag("triggered");
+      --scopeDepth;
       return currentScope._type;
     }
     else if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
     {
-      currentScope._data = "fail";
+      insertConditionFlag("fail");
+      --scopeDepth;
       return currentScope._type;
     }
+    insertConditionFlag("true");
   }
   else if (currentScope._syntax == "el")//Check if syntax is a scope then recurse if statement true
   {
     //std::cout << currentScope._backNeighbor->_syntax;
-    if (currentScope._backNeighbor->_data == "triggered" || currentScope._backNeighbor->_data != "true")
+    if (conditionDepthFlag[scopeDepth] == "triggered" || conditionDepthFlag[scopeDepth] != "true")
     {
       //currentScope.scopeIndex = 0;
+      --scopeDepth;
       return currentScope._type;
     }
   }
@@ -223,8 +240,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
       {
         parseSyntax(currentScope, itterateArguments(currentScope._arguments), currentScope._scope);
         ++currentScope.scopeIndex;
-        //std::cout <<"Functions : \n";
-        //for (auto i : functions){std::cout << i._scope[0]._syntax << '\n';}
+        --scopeDepth;
         return currentScope._type;
       }
     }
@@ -233,7 +249,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
     ++currentScope.scopeIndex;
     //currentScope._scope.pop();
   }
-  //currentScope.scopeIndex = 0;
+  --scopeDepth;
   return currentScope._type;
 }
 

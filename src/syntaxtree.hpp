@@ -38,9 +38,9 @@ public:
   std::vector<syntaxNode>  _arguments;  // arguments for the scope ex: (arg1, arg2, arg3)
   std::vector<syntaxNode> _scope;  // the queue of syntax nodes within the scope of this syntaxNode -- if it is empy it returns to the parent syntax node.
   std::size_t scopeIndex = 0;
-  syntaxNode* _parent = nullptr;
-  syntaxNode* _backNeighbor = nullptr;
 };
+
+void insertConditionFlag(std::string flag);
 
 syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);  //parse the current syntax
 
