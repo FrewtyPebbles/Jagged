@@ -1,0 +1,27 @@
+VAR("itterator", "0");
+VAR("exponentBaseValue", "0");
+VAR("exponentproduct", "0");
+VAR("exponentAmmount", "0");
+
+exec("exponentRecursion")
+	if(less(itterator, subtract(exponentAmmount, "1")))
+		set("exponentproduct", multiply(exponentproduct, exponentBaseValue));
+		set("itterator", add(itterator, "1"));
+		exponentRecursion;
+	^
+^
+
+exec("exponent")
+	set("itterator", "0");
+	set("exponentproduct", exponentBaseValue);
+	exponentRecursion;
+^
+
+print("Enter an base : ");
+input("exponentBaseValue");
+print("Enter an exponent : ");
+input("exponentAmmount");
+
+exponent;
+
+print("Exponent product = ", exponentproduct, "`n");
