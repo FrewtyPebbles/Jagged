@@ -10,7 +10,7 @@ input("number2")
   VAR("number2", "input");
   print("Enter a second number: ");
 ^
-print("`n`nCONDITIONS SATISFIED:`n`n");
+print("`n`nCONDITION SATISFIED:`n`n");
 if(equal(number1,number2))
   print("EQUAL");
   print("`n`n");
@@ -31,3 +31,4 @@ elif(lessOrEqual(number1,number2))
   print("LESS OR EQUAL");
   print("`n`n");
 ^
+#print("done`n");

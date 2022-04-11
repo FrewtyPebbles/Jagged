@@ -10,7 +10,7 @@
 
 */
 
-const std::string VERSION = "0.9.15";
+const std::string VERSION = "0.10.15";
 
 int main (int argc, char* argv[])
 {
@@ -21,7 +21,7 @@ int main (int argc, char* argv[])
     std::ifstream sourceFile(argv[1], std::ifstream::in);
     std::stringstream source;
     source << sourceFile.rdbuf();
-    input = source.str();
+    input = "\n" + source.str();
     scanSource(input);
   }
   else
@@ -31,6 +31,7 @@ int main (int argc, char* argv[])
     {
       std::cout << "§";
       getline(std::cin, input);
+      input = "\n" + input;
       scanSource(input);
     }
   }

@@ -159,11 +159,11 @@ int scanSource(std::string& source)
     {
       isComment = true;
     }
-    else if ((character == '\n' || character == '#') && isComment && !isQuoting)
+    else if ((character == '\n') && isComment && !isQuoting)
     {
       isComment = false;
     }
-    if (character == '"')
+    if (character == '"' && !isComment)
     {
       //check quoting.
       if (isQuoting == true)
@@ -325,11 +325,11 @@ int scanSource(std::string& source)
           keyword += character;
       }
     }
-    else if (character != '"' && character != '`')
+    else if (character != '"' && character != '`' && !isComment)
     {
       keyword += character;
     }
-    lastChar = character;
+    if (!isComment)lastChar = character;
   }
   //std::cout << "Compiled Successfully.\n";
   //syntax tree hardcode test

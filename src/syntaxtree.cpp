@@ -5,6 +5,8 @@ std::vector<Variable> scriptVariables;
 std::vector<constantVariable> scriptConstantVariables;
 std::vector<discVariable> scriptDiscVariables;
 std::vector<syntaxNode> functions;
+std::vector<std::string> conditionDepthFlag;
+unsigned scopeDepth = 0;
 
 syntaxNode::syntaxNode(){}
 syntaxNode::syntaxNode(std::string type, std::string syntax, std::string data):_type(std::move(type)),_syntax(std::move(syntax)),_data(std::move(data)){}
@@ -170,11 +172,9 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
   return returnVec;
 }
 //Only execute elses if the previous syntax in the scope is an if or else if and it evaluated to false.
-std::vector<std::string> conditionDepthFlag;
-unsigned scopeDepth = 0;
 void insertConditionFlag(std::string flag)
 {
-  std::cout << conditionDepthFlag.capacity() << " = capacity" << scopeDepth << " = scopeDepth\n";
+  if (conditionDepthFlag.capacity() == 0) conditionDepthFlag.push_back("global");
   if (conditionDepthFlag.capacity() > scopeDepth)
   {
     conditionDepthFlag[scopeDepth] = flag;
@@ -183,32 +183,31 @@ void insertConditionFlag(std::string flag)
   {
     conditionDepthFlag.push_back(flag);
   }
+  return;
 }
 std::string itterateScopeRecursion(syntaxNode currentScope)
 {
   //SCOPES
   if (currentScope._syntax == "if")//Check if syntax is a scope then recurse if statement true
   {
-    insertConditionFlag("true");
+    //std::cout << "segFault " << scopeDepth << " = scope depth " << conditionDepthFlag.capacity() << " = capacity\n";
     if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
     {
       insertConditionFlag("fail");
-      --scopeDepth;
       return currentScope._type;
     }
+    insertConditionFlag("true");
   }
   else if (currentScope._syntax == "elif")//Check if syntax is a scope then recurse if statement true
   {
-    if (conditionDepthFlag[scopeDepth] == "triggered" || conditionDepthFlag[scopeDepth] == "true")
+    if (conditionDepthFlag[scopeDepth] != "fail")
     {
       insertConditionFlag("triggered");
-      --scopeDepth;
       return currentScope._type;
     }
     else if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
     {
       insertConditionFlag("fail");
-      --scopeDepth;
       return currentScope._type;
     }
     insertConditionFlag("true");
@@ -216,10 +215,9 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
   else if (currentScope._syntax == "el")//Check if syntax is a scope then recurse if statement true
   {
     //std::cout << currentScope._backNeighbor->_syntax;
-    if (conditionDepthFlag[scopeDepth] == "triggered" || conditionDepthFlag[scopeDepth] != "true")
+    if (conditionDepthFlag[scopeDepth] != "fail")
     {
       //currentScope.scopeIndex = 0;
-      --scopeDepth;
       return currentScope._type;
     }
   }
@@ -240,7 +238,6 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
       {
         parseSyntax(currentScope, itterateArguments(currentScope._arguments), currentScope._scope);
         ++currentScope.scopeIndex;
-        --scopeDepth;
         return currentScope._type;
       }
     }
@@ -248,9 +245,9 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
     itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex]);
     parseSyntax(currentScope._scope[currentScope.scopeIndex], itterateArguments(currentScope._scope[currentScope.scopeIndex]._arguments), currentScope._scope[currentScope.scopeIndex]._scope);
     ++currentScope.scopeIndex;
-    //currentScope._scope.pop();
+    --scopeDepth;
   }
-  --scopeDepth;
+
   return currentScope._type;
 }
 

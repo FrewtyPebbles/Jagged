@@ -134,7 +134,7 @@ void setMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::v
     Variable * i(&(*it));
     if (i->getVariableName() == arguments[0]._syntax)
     {
-      std::cout << "VARNAME: " << i->getVariableName() << " ARGNAME: " << arguments[0]._syntax << '\n';
+      //std::cout << "VARNAME: " << i->getVariableName() << " ARGNAME: " << arguments[0]._syntax << '\n';
       i->setVariable(parseArguments(scriptVariables, 2, syntax, arguments, currentScope));
       break;
     }
