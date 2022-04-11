@@ -1,3 +1,4 @@
+# Number Functions:
 exec("plus")
   print("Adding the numbers 5 and 2...`n");
   print(" 4 + 2 = ", add("4","2"),"`n");
@@ -31,6 +32,18 @@ exec("fraction")
   print(" 4 / ", fractionInput, " = ", multiply("4", fractionInput),"`n");
 ^
 
+# Recursive function:
+exec("recursionExample")
+  print("`nEnter the ammount that you would like to add : ");
+  set("value", add(value, input));
+  print("`n   Sum = ", value, "`n");
+  print("`n`nWould you like to keep adding?`n ( y / n ) ");
+  input("userInput");
+  if (equal(userInput, "y"))
+    recursionExample;
+  ^
+^
+
 VAR("userInput", input)
   print("enter a number from 1 to 4:");
 ^
@@ -49,19 +62,15 @@ if (equal(userInput, "4"))
   fraction;
 ^
 
-print("Recursion time! (Set function might still be broken, sorry!)`n");
+print("`nRecursion time!`n`n");
 print("Input a number value:");
 VAR("value",input);
 
-exec("recursionExample")
-  print("`nEnter the ammount that you would like to add : ");
-  print("value added to ", value, " = ", add(value, input), "`n");
-  print("Would you like to add to ", value, " again (y/n):");
-  input("userInput");
-  if (equal(userInput, "y"))
-    recursionExample;
-  ^
-^
+# Start recursion
 
 recursionExample;
-print("Thanks for recursing!`n");
+
+# End of recursion
+
+print("`nThanks for recursing!`n");
+print("`n Your final sum after recursing is : `n`n        ", value, "`n`n");
