@@ -93,7 +93,7 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
       //if grammar does not exist
 
     }
-    if (!grammarExists)
+    if (!grammarExists && !isQuoting)
     {
       if (isArgument)
       {

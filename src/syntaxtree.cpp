@@ -1,7 +1,8 @@
 #include "syntaxtree.hpp"
 
 //variables and function storage
-std::vector<Variable> scriptVariables;
+//std::vector<Variable> scriptVariables;
+VarMap scriptVariables;
 std::vector<constantVariable> scriptConstantVariables;
 std::vector<discVariable> scriptDiscVariables;
 std::vector<syntaxNode> functions;
@@ -62,7 +63,7 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     }
     else if (syntax._syntax == "set")
     {
-      setMethod(scriptVariables,syntax,arguments,currentScope);// sets arg 0 variable to arg 1
+      setMethod(&scriptVariables[arguments[0]._syntax], scriptVariables,syntax,arguments,currentScope);// sets arg 0 variable to arg 1
     }
     else if (syntax._syntax == "equal")
     {
@@ -138,10 +139,11 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
         if (arguments[i]._type == "literal")
         {
           returnVec.push_back(arguments[i]);
+
         }
         else if (arguments[i]._type == "variable")
         {
-          for (Variable q : scriptVariables)
+          /*for (Variable q : scriptVariables)
           {
             if (q.getVariableName() == arguments[i]._syntax)
             {
@@ -149,8 +151,8 @@ std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
               returnVec.push_back(syntaxNode("literal", q.getVariableValue()[0],arguments[i]._syntax));
               break;
             }
-          }
-
+          }*/
+          returnVec.push_back(syntaxNode("literal", scriptVariables[arguments[i]._syntax].getVariableValue()[0],arguments[i]._syntax));
         }
         else
         {

@@ -1,25 +1,29 @@
 #include "syntaxtree.hpp"
 
-
-
-std::string parseArguments(std::vector<Variable>& scriptVariables1, unsigned argumentnum, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string parseArguments(VarMap & scriptVariables, unsigned argumentnum, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {
   std::string argstr;
+  //std::cout << "segf1.1\n";
   if (arguments[argumentnum]._type == "variable")
   {
-    for(unsigned i = 0; i < scriptVariables1.size(); ++i)
+    /*for(unsigned i = 0; i < scriptVariables.size(); ++i)
     {
-      if (scriptVariables1[i].getVariableName() == arguments[argumentnum]._syntax)
+      if (scriptVariables[i].getVariableName() == arguments[argumentnum]._syntax)
       {
-        argstr = scriptVariables1[i].getVariableValue()[0];
-        break;
+
       }
-    }
+    }*/
+    //std::cout << "segf1.1.1\n";
+    argstr = scriptVariables[arguments[argumentnum]._syntax].getVariableValue()[0];
+    //std::cout << "segf1.1.2\n";
   }
   else if (arguments[argumentnum]._type == "literal")
   {
+    //std::cout << "segf1.1.3\n";
     argstr = arguments[argumentnum]._syntax;
+    //std::cout << "segf1.1.4\n";
   }
+  //std::cout << "segf1.2\n";
   //std::cout << syntax._syntax << '\n';
   //for (syntaxNode i : arguments){std::cout << "ARGS: " << i._syntax << '\n';}
   return argstr;
@@ -28,49 +32,50 @@ std::string parseArguments(std::vector<Variable>& scriptVariables1, unsigned arg
 //MATH
 //Use reverse pemdas. s a d m e p
 
-std::string subtractNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string subtractNums(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) - strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
 
-std::string addNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string addNums(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) + strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
 
-std::string divideNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string divideNums(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) / strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
 
-std::string multiplyNums(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string multiplyNums(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) * strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
 
 //COMPARISON  return 1 or 0
 
-std::string equal(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string equal(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {//std::cout << " arg 0 : " << parseArguments(scriptVariables, 0, syntax, arguments, currentScope) << " arg 1 : " << parseArguments(scriptVariables, 1, syntax, arguments, currentScope) << "\n";
   return std::to_string(parseArguments(scriptVariables, 0, syntax, arguments, currentScope) == parseArguments(scriptVariables, 1, syntax, arguments, currentScope));}
-std::string less(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string less(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) < strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
-std::string greater(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string greater(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {//std::cout << " arg 0 : " << parseArguments(scriptVariables, 0, syntax, arguments, currentScope) << " arg 1 : " << parseArguments(scriptVariables, 1, syntax, arguments, currentScope) << "\n";
   return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) > strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
-std::string greaterOrEqual(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string greaterOrEqual(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) >= strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
-std::string lessOrEqual(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string lessOrEqual(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {return std::to_string(strtof(parseArguments(scriptVariables, 0, syntax, arguments, currentScope).c_str(), nullptr) <= strtof(parseArguments(scriptVariables, 1, syntax, arguments, currentScope).c_str(), nullptr));}
 
 //MISC FUNCTIONS
 
-void printMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+void printMethod(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {
   for(unsigned j = 0; j < arguments.size(); ++j)
   {
     if (arguments[j]._type == "variable")
     {
-      for(unsigned i = 0; i < scriptVariables.size(); ++i)
+      /*for(unsigned i = 0; i < scriptVariables.size(); ++i)
       {
         if (scriptVariables[i].getVariableName() == arguments[j]._syntax)
         {
           std::cout << scriptVariables[i].getVariableValue()[0];
           break;
         }
-      }
+      }*/
+      std::cout << scriptVariables[arguments[j]._syntax].getVariableValue()[0];
     }
     else if (arguments[j]._type == "literal")
     {
@@ -79,7 +84,7 @@ void printMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std:
   }
 }
 
-std::string inputMethod(std::vector<Variable>& scriptVariables,  std::vector<syntaxNode> arguments )
+std::string inputMethod(VarMap& scriptVariables,  std::vector<syntaxNode> arguments )
 {
   std::string input;
   //std::cout << arguments.size();
@@ -89,7 +94,13 @@ std::string inputMethod(std::vector<Variable>& scriptVariables,  std::vector<syn
     //std::cout << input;
     return input;
   }
-  for(unsigned i = 0; i < scriptVariables.size(); ++i)
+  else
+  {
+    getline(std::cin, input);
+    scriptVariables[arguments[0]._syntax].setVariable(input);
+    return input;
+  }
+  /*for(unsigned i = 0; i < scriptVariables.size(); ++i)
   {
     //std::cout << "varname*: " << scriptVariables[i].getVariableName() << " argument*: " << arguments[0]._syntax << '\n';
     if (scriptVariables[i].getVariableName() == arguments[0]._syntax)
@@ -99,7 +110,8 @@ std::string inputMethod(std::vector<Variable>& scriptVariables,  std::vector<syn
       scriptVariables[i].setVariable(input);
       return input;
     }
-  }
+  }*/
+
 }
 //FUNCTION METHODS
 std::string functionInstantiateMethod(syntaxNode Instantiation, std::vector<syntaxNode>& functions, std::vector<syntaxNode> arguments)
@@ -118,18 +130,18 @@ std::string functionInstantiateMethod(syntaxNode Instantiation, std::vector<synt
   return arguments[0]._syntax;
 }
 //VARIABLE METHODS
-void varMethod(std::vector<Variable>& scriptVariables, std::vector<syntaxNode> arguments)
+void varMethod(VarMap& scriptVariables, std::vector<syntaxNode> arguments)
 {
   std::vector<std::string> rhs;
   rhs.push_back(arguments[1]._syntax);
   //std::cout << "VARMETHOD ARG 2 : " << arguments[0]._syntax << '\n';
   Variable tempVar(arguments[0], arguments[0]._syntax, rhs);
-  scriptVariables.push_back(tempVar);
+  scriptVariables[arguments[0]._syntax] = tempVar;
 }
 
-void setMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+void setMethod(Variable * variableToSet, VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {
-  for (std::vector<Variable>::iterator it = begin(scriptVariables); it != end(scriptVariables); ++it)
+  /*for (VarMap::iterator it = begin(scriptVariables); it != end(scriptVariables); ++it)
   {
     Variable * i(&(*it));
     if (i->getVariableName() == arguments[0]._syntax)
@@ -138,5 +150,9 @@ void setMethod(std::vector<Variable>& scriptVariables, syntaxNode syntax, std::v
       i->setVariable(parseArguments(scriptVariables, 2, syntax, arguments, currentScope));
       break;
     }
-  }
+  }*/
+  //std::cout << "segf1\n";
+  //std::cout << variableToSet->getVariableName() << " : VAR\n";
+  variableToSet->setVariable(parseArguments(scriptVariables, 1, syntax, arguments, currentScope));
+  //std::cout << "segf2\n";
 }

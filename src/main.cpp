@@ -6,11 +6,9 @@
 
  BUGS:
 
--=***=- DO NOT RUN UNTILL MEMORY BUG IS FIXED IN _backneighbor!
-
 */
 
-const std::string VERSION = "0.10.15";
+const std::string VERSION = "0.10.16";
 
 int main (int argc, char* argv[])
 {
