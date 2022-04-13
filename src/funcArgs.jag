@@ -1,0 +1,15 @@
+exec("yesOrNo","userInput")
+	if(equal(userInput, "yes"))
+		print("Ok cool.`n");
+	^
+	elif(equal(userInput, "no"))
+		print("Not cool.`n");
+	^
+	print("end`n");
+^
+
+print("input : ");
+
+yesOrNo(input);
+
+yesOrNo(input);

@@ -39,13 +39,11 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
 {
   if (grammar != "")  //grammar pushed to arguments
   {
-    //std::cout << grammar << '\n';
     syntaxNode nextSyntax;
     nextSyntax._syntax = grammar;
     grammarExists = false;
     if (isQuoting)
     {
-      //std::cout << "literal arguments \n";
       literalLookupTable.push_back(grammar);
       nextSyntax._type = "literal";
 
@@ -55,7 +53,6 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
     {
         for (std::string _scope : scopeLookupTable)
         {
-          //std::cout << "scope arguments \n";
           if (_scope == grammar)
           {
             nextSyntax._type = "scope";grammarExists = true;scopeStack.top()->_arguments.push_back(nextSyntax);break;
@@ -63,7 +60,6 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
         }
         for (std::string _grammar : grammarLookupTable)
         {
-          //std::cout << "grammar arguments \n";
           if (_grammar == grammar)
           {
             nextSyntax._type = "grammar";grammarExists = true;scopeStack.top()->_arguments.push_back(nextSyntax);break;
@@ -76,15 +72,13 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
     {
       for (std::string _scope : scopeLookupTable)
       {
-        //std::cout << "scope scope \n";
         if (_scope == grammar)
-        {//std::cout << scopeStack.top()->_scope.back()._syntax << " -- " << nextSyntax._syntax << ";\n";
+        {
           nextSyntax._type = "scope";grammarExists = true;scopeStack.top()->_scope.push_back(nextSyntax); break;
         }
       }
       for (std::string _grammar : grammarLookupTable)
       {
-        //std::cout << "grammar scope \n";
         if (_grammar == grammar)
         {
           nextSyntax._type = "grammar";grammarExists = true;scopeStack.top()->_scope.push_back(nextSyntax);break;
@@ -97,37 +91,24 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
     {
       if (isArgument)
       {
-        //std::cout << "variable arguments1 \n";
         variableLookupTable.push_back(grammar);
-        //std::cout << "variable arguments2 \n";
         nextSyntax._type = "variable";
-        //std::cout << scopeStack.top()->_syntax << " variable arguments3 \n";
         scopeStack.top()->_arguments.push_back(nextSyntax);
-        //std::cout << "variable arguments4 \n";
       }
       else
       {
-        //std::cout << "variable arguments1 \n";
         variableLookupTable.push_back(grammar);
-        //std::cout << "variable arguments2 \n";
         nextSyntax._type = "scope";
-        //std::cout << scopeStack.top()->_syntax << " variable arguments3 \n";
-
         scopeStack.top()->_scope.push_back(nextSyntax);
-        //std::cout << "variable arguments4 \n";
       }
     }
 
-    //std::cout << "\nSCOPE ARGUMENTS: " << scopeStack.top()->_syntax << "\n";
-    //for (syntaxNode i : scopeStack.top()->_arguments){std::cout << i._syntax << " << SCOPE ARGUMENT\n";}
     if (isArgument == false)
     {
-      //std::cout << "scope back\n";
       scopeStack.push(&scopeStack.top()->_scope.back());  //set scope to the new scope.
     }
     else
     {
-      //std::cout << "args front\n";
       scopeStack.push(&scopeStack.top()->_arguments.back());  //set scope to the new scope.
     }
   }
@@ -170,7 +151,6 @@ int scanSource(std::string& source)
       {
         //push quote
         parseGrammar(scopeStack, keyword, isArgument);
-        //scopeStack.pop();
         keyword = "";
       }
       isQuoting = !isQuoting;
@@ -232,7 +212,6 @@ int scanSource(std::string& source)
           break;
         case '(':
           ++argScope;
-          //std::cout << "arguments :\n" << scopeStack.top()->_syntax << " < scopestack top\n" << keyword << " < grammar\n" << isArgument << " < isArgument\n";
           parseGrammar(scopeStack, keyword, isArgument);
           isArgument = true;
           keyword = "";
@@ -261,7 +240,6 @@ int scanSource(std::string& source)
           keyword = "";
           break;
         case ',':
-          //std::cout << scopeStack.top() -> _syntax << " <- before comma \n";
           parseGrammar(scopeStack, keyword, isArgument);
           isArgument = true;
           scopeStack.pop();
@@ -331,20 +309,8 @@ int scanSource(std::string& source)
     }
     if (!isComment)lastChar = character;
   }
-  //std::cout << "Compiled Successfully.\n";
-  //syntax tree hardcode test
-  /*scopeStack.top()._scope.push(syntaxNode("print"));
-  scopeStack.top()._scope.front()._scope.push(syntaxNode("close"));
-  scopeStack.top()._scope.front()._scope.front()._scope.push(syntaxNode("open"));
-  scopeStack.top()._scope.front()._scope.front()._scope.front()._scope.push(syntaxNode("input"));
-  scopeStack.top()._scope.front()._scope.front()._scope.push(syntaxNode("Jag"));
-  scopeStack.top()._scope.front()._scope.push(syntaxNode("input"));
-  syntaxNode newone("input");
-  newone._scope.push(syntaxNode("Jag"));
-  scopeStack.top()._scope.front()._scope.push(newone);
-  scopeStack.top()._scope.push(syntaxNode("close"));*/
-  //scopeStack.top()._scope.front()._scope.front()._scope.push(syntaxNode("Jag"));
-  itterateScope(*scopeStack.top());
+  std::vector<syntaxNode> defaultVec = {};
+  itterateScope(*scopeStack.top(), defaultVec);
   scopeStack.pop();
   return 0;
 }

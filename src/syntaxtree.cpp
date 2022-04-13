@@ -87,7 +87,7 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     }
     else if (syntax._syntax == "exec")
     {
-      return syntaxNode("literal", functionInstantiateMethod(syntax, functions, arguments),syntax._syntax);
+      return syntaxNode("literal", functionInstantiateMethod(scriptVariables, syntax, functions, arguments),syntax._syntax);
     }
     else if (syntax._syntax == "if")
     {return syntax;}
@@ -99,11 +99,9 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     {
       for(syntaxNode i : functions)
       {
-        //std::cout << "Function:" << syntax._syntax << '\n';
         if (i._syntax == syntax._syntax)
         {
-          //std::cout << "Function:" << i._syntax << '\n';
-          itterateScope(i);
+          itterateScope(i, syntax._arguments);
         }
       }
     }
@@ -111,63 +109,103 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
   return syntax;
 }
 
-std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments)
+std::vector<syntaxNode> itterateArguments(std::string type, std::vector<syntaxNode> & arguments, syntaxNode userFunction)
 {
   std::vector<syntaxNode> returnVec = {};
-  for (std::size_t i = 0; i < arguments.size(); ++i)
+  if(type == "function")
   {
-    if (!arguments[i]._arguments.empty())
+    for (std::size_t i = 0; i < arguments.size(); ++i)
     {
-      if (arguments[i]._type != "literal")
+      std::cout << "ARG : " << arguments[i]._syntax << '\n';
+      if (!arguments[i]._arguments.empty())
       {
-        returnVec.push_back(parseSyntax(arguments[i], itterateArguments(arguments[i]._arguments), arguments[i]._scope));
-      }
-      else
-      {
-        returnVec.push_back(arguments[i]);
-      }
-      /*for (syntaxNode j : argvec) {std::cout << "argvec: " << j._syntax << '\n';}
-      for (syntaxNode j : arguments) {std::cout << "args: " << j._syntax << '\n';
-      for (syntaxNode k : j._arguments) {std::cout << "args2: " << k._syntax << '\n';}}
-      returnVec.insert(it, argvec.begin(), argvec.end());*/
-
-    }
-    else
-    {
-      if (arguments[i]._scope.empty())//scope empty
-      {
-        if (arguments[i]._type == "literal")
+        if (arguments[i]._type != "literal")
         {
-          returnVec.push_back(arguments[i]);
-
-        }
-        else if (arguments[i]._type == "variable")
-        {
-          /*for (Variable q : scriptVariables)
-          {
-            if (q.getVariableName() == arguments[i]._syntax)
-            {
-              //std::cout << " SPECIAL varname: " << q.getVariableName() << " SPECIAL syntax: " << i->_syntax << '\n' << " SPECIAL VALUE: " << q.getVariableValue()[0] << '\n';
-              returnVec.push_back(syntaxNode("literal", q.getVariableValue()[0],arguments[i]._syntax));
-              break;
-            }
-          }*/
-          returnVec.push_back(syntaxNode("literal", scriptVariables[arguments[i]._syntax].getVariableValue()[0],arguments[i]._syntax));
+          scriptVariables[userFunction._arguments[i + 1]._syntax].setVariable(parseSyntax(arguments[i], itterateArguments(arguments[i]._type, arguments[i]._arguments), arguments[i]._scope)._syntax);
+          //returnVec.push_back(parseSyntax(arguments[i], itterateArguments(arguments[i]._type, arguments[i]._arguments), arguments[i]._scope));
         }
         else
         {
-          returnVec.push_back(parseSyntax(arguments[i], arguments[i]._arguments, arguments[i]._scope));
+          scriptVariables[userFunction._arguments[i + 1]._syntax].setVariable(arguments[i]._syntax);
+          //returnVec.push_back(arguments[i]);
         }
-        //std::cout << returnVec.back()._syntax <<" segf\n";
       }
       else
       {
-        //scope not empty
-        while(!arguments[i]._scope.empty())
+        if (arguments[i]._scope.empty())//scope empty
         {
-          itterateScopeRecursion(arguments[i]);
+          if (arguments[i]._type == "literal")
+          {
+            scriptVariables[userFunction._arguments[i + 1]._syntax].setVariable(arguments[i]._syntax);
+            //returnVec.push_back(arguments[i]);
+          }
+          else if (arguments[i]._type == "variable")
+          {
+            scriptVariables[userFunction._arguments[i + 1]._syntax].setVariable(scriptVariables[arguments[i]._syntax].getVariableValue()[0]);
+            //returnVec.push_back(syntaxNode("literal", scriptVariables[arguments[i]._syntax].getVariableValue()[0],arguments[i]._syntax));
+          }
+          else
+          {
+            scriptVariables[userFunction._arguments[i + 1]._syntax].setVariable(parseSyntax(arguments[i], arguments[i]._arguments, arguments[i]._scope)._syntax);
+            //returnVec.push_back(parseSyntax(arguments[i], arguments[i]._arguments, arguments[i]._scope));
+          }
         }
-        return returnVec;
+        else
+        {
+          //scope not empty
+          while(!arguments[i]._scope.empty())
+          {
+            std::vector<syntaxNode> defaultVec = {};
+            itterateScopeRecursion(arguments[i], defaultVec);
+          }
+          return returnVec;
+        }
+      }
+    }
+  }
+  else
+  {
+    for (std::size_t i = 0; i < arguments.size(); ++i)
+    {
+      if (!arguments[i]._arguments.empty())
+      {
+        if (arguments[i]._type != "literal")
+        {
+          returnVec.push_back(parseSyntax(arguments[i], itterateArguments(arguments[i]._type, arguments[i]._arguments), arguments[i]._scope));
+        }
+        else
+        {
+          returnVec.push_back(arguments[i]);
+        }
+      }
+      else
+      {
+        if (arguments[i]._scope.empty())//scope empty
+        {
+          if (arguments[i]._type == "literal")
+          {
+            returnVec.push_back(arguments[i]);
+
+          }
+          else if (arguments[i]._type == "variable")
+          {
+            returnVec.push_back(syntaxNode("literal", scriptVariables[arguments[i]._syntax].getVariableValue()[0],arguments[i]._syntax));
+          }
+          else
+          {
+            returnVec.push_back(parseSyntax(arguments[i], arguments[i]._arguments, arguments[i]._scope));
+          }
+        }
+        else
+        {
+          //scope not empty
+          while(!arguments[i]._scope.empty())
+          {
+            std::vector<syntaxNode> defaultVec = {};
+            itterateScopeRecursion(arguments[i], defaultVec);
+          }
+          return returnVec;
+        }
       }
     }
   }
@@ -187,13 +225,12 @@ void insertConditionFlag(std::string flag)
   }
   return;
 }
-std::string itterateScopeRecursion(syntaxNode currentScope)
+std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNode> & userArguments)
 {
   //SCOPES
   if (currentScope._syntax == "if")//Check if syntax is a scope then recurse if statement true
   {
-    //std::cout << "segFault " << scopeDepth << " = scope depth " << conditionDepthFlag.capacity() << " = capacity\n";
-    if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
+    if (itterateArguments(currentScope._type, currentScope._arguments)[0]._syntax != "1")
     {
       insertConditionFlag("fail");
       return currentScope._type;
@@ -207,7 +244,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
       insertConditionFlag("triggered");
       return currentScope._type;
     }
-    else if (itterateArguments(currentScope._arguments)[0]._syntax != "1")
+    else if (itterateArguments(currentScope._type, currentScope._arguments)[0]._syntax != "1")
     {
       insertConditionFlag("fail");
       return currentScope._type;
@@ -216,10 +253,8 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
   }
   else if (currentScope._syntax == "el")//Check if syntax is a scope then recurse if statement true
   {
-    //std::cout << currentScope._backNeighbor->_syntax;
     if (conditionDepthFlag[scopeDepth] != "fail")
     {
-      //currentScope.scopeIndex = 0;
       return currentScope._type;
     }
   }
@@ -238,14 +273,22 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
       }
       if (functionInstantiated == false)
       {
-        parseSyntax(currentScope, itterateArguments(currentScope._arguments), currentScope._scope);
+        if (currentScope._type == "function")
+        {
+          std::vector<syntaxNode> fakeargs = {};
+          parseSyntax(currentScope, fakeargs, currentScope._scope);
+        }
+        else
+        {
+          parseSyntax(currentScope, itterateArguments(currentScope._type, currentScope._arguments), currentScope._scope);
+        }
         ++currentScope.scopeIndex;
         return currentScope._type;
       }
     }
     ++scopeDepth;
-    itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex]);
-    parseSyntax(currentScope._scope[currentScope.scopeIndex], itterateArguments(currentScope._scope[currentScope.scopeIndex]._arguments), currentScope._scope[currentScope.scopeIndex]._scope);
+    itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex], userArguments);
+    parseSyntax(currentScope._scope[currentScope.scopeIndex], itterateArguments(currentScope._scope[currentScope.scopeIndex]._type, currentScope._scope[currentScope.scopeIndex]._arguments), currentScope._scope[currentScope.scopeIndex]._scope);
     ++currentScope.scopeIndex;
     --scopeDepth;
   }
@@ -253,9 +296,10 @@ std::string itterateScopeRecursion(syntaxNode currentScope)
   return currentScope._type;
 }
 
-void  itterateScope(syntaxNode currentSyntax)
+void  itterateScope(syntaxNode currentSyntax, std::vector<syntaxNode> & userArguments)
 {
+  itterateArguments(currentSyntax._type, userArguments, currentSyntax);
   currentSyntax.scopeIndex = 0;
-  itterateScopeRecursion(currentSyntax);
+  itterateScopeRecursion(currentSyntax, userArguments);
   return;
 }

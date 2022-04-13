@@ -94,11 +94,11 @@ void insertConditionFlag(std::string flag);
 
 syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);  //parse the current syntax
 
-std::string itterateScopeRecursion(syntaxNode currentScope);
+std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNode> & userArguments);
 
-void itterateScope(syntaxNode currentSyntax);  //itterate recursively through syntax tree
+void itterateScope(syntaxNode currentSyntax, std::vector<syntaxNode> & userArguments);  //itterate recursively through syntax tree
 
-std::vector<syntaxNode> itterateArguments(std::vector<syntaxNode> & arguments);  //itterate through arguments
+std::vector<syntaxNode> itterateArguments(std::string type, std::vector<syntaxNode> & arguments, syntaxNode userFunction = syntaxNode());  //itterate through arguments
 
 
 
@@ -121,7 +121,7 @@ std::string greater(VarMap& scriptVariables, syntaxNode syntax, std::vector<synt
 std::string greaterOrEqual(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 std::string lessOrEqual(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 //User Functions
-std::string functionInstantiateMethod(syntaxNode Instantiation, std::vector<syntaxNode>& functions, std::vector<syntaxNode> arguments);
+std::string functionInstantiateMethod(VarMap& scriptVariables, syntaxNode Instantiation, std::vector<syntaxNode>& functions, std::vector<syntaxNode> arguments);
 //Standard library functions
 void printMethod(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 std::string inputMethod(VarMap& scriptVariables, std::vector<syntaxNode> arguments );
