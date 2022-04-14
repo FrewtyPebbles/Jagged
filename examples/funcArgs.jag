@@ -1,20 +1,13 @@
-#ERROR: inside exec(with arguments) STL functions and elif only works inside an if statement
-exec("yesOrNo","userInput")
-	if(equal("1", "1"))
-		if(equal(userInput, "yes"))
-			print("Ok cool. -- JAG`n");
-		^
-		elif(equal(userInput, "no"))
-			print("Not cool. -- JAG`n");
-		^
-		print("end -- JAG`n");
+exec("yesOrNo", "userInput", "test2")
+	if(equal(userInput, "yes"))
+		print("Ok cool. -- JAG`n");
 	^
+	elif(equal(userInput, "no"))
+		print("Not cool. -- JAG`n");
+	^
+	print("end -- JAG`n");
 ^
 
 print("input: -- JAG`n");
 
-#ERROR: User functions call arguments more than once
-yesOrNo(input);
-
-#ERROR: User functions call arguments more than once
-yesOrNo(input);
+yesOrNo(input, print("test"));

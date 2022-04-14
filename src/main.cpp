@@ -6,14 +6,11 @@
 
  BUGS:
 
- - inside exec(with arguments) STL functions and elif
- only works inside an if statement
-
  - User functions call arguments more than once
 
 */
 
-const std::string VERSION = "0.10.17";
+const std::string VERSION = "0.10.18";
 
 int main (int argc, char* argv[])
 {

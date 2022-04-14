@@ -114,6 +114,7 @@ std::vector<syntaxNode> itterateArguments(std::string type, std::vector<syntaxNo
   std::vector<syntaxNode> returnVec = {};
   if(type == "function")
   {
+    std::cout << "itter args\n";
     for (std::size_t i = 0; i < arguments.size(); ++i)
     {
       std::cout << "ARG : " << arguments[i]._syntax << '\n';
@@ -279,14 +280,16 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
       }
     }
     std::vector<syntaxNode> functionArgs;
-    if (currentScope._type == "function")
+    if (currentScope._type == "function" && currentScope.scopeIndex == 0)
     {
+      std::cout << currentScope._syntax << " == type func\n";
       //std::cout << "is Function 2!!!\n";
       insertConditionFlag("function");
-      functionArgs = {};
+      functionArgs = itterateArguments(currentScope._type, userArguments, currentScope);
     }
     else
     {
+      std::cout << currentScope._syntax << " != type func\n";
       functionArgs = itterateArguments(currentScope._scope[currentScope.scopeIndex]._type, currentScope._scope[currentScope.scopeIndex]._arguments);
     }
     ++scopeDepth;
@@ -294,16 +297,6 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
     itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex], userArguments);
     //std::cout << " segf 2\n";
 
-    if (currentScope._type == "function")
-    {
-      //std::cout << "is Function 2!!!\n";
-      insertConditionFlag("function");
-      functionArgs = {};
-    }
-    else
-    {
-      functionArgs = itterateArguments(currentScope._scope[currentScope.scopeIndex]._type, currentScope._scope[currentScope.scopeIndex]._arguments);
-    }
     parseSyntax(currentScope._scope[currentScope.scopeIndex], functionArgs, currentScope._scope[currentScope.scopeIndex]._scope);
     ++currentScope.scopeIndex;
     --scopeDepth;
@@ -315,11 +308,11 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
 void  itterateScope(syntaxNode currentSyntax, std::vector<syntaxNode> & userArguments)
 {
   currentSyntax.scopeIndex = 0;
-  if (currentSyntax._type == "function")
+  /*if (currentSyntax._type == "function")
   {
     //std::cout << "is Function 1!!!\n";
     itterateArguments(currentSyntax._type, userArguments, currentSyntax);
-  }
+  }*/
   itterateScopeRecursion(currentSyntax, userArguments);
   return;
 }
