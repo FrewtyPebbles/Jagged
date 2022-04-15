@@ -102,6 +102,7 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
         if (i._syntax == syntax._syntax)
         {
           itterateScope(i, syntax._arguments);
+          break;
         }
       }
     }
@@ -114,10 +115,10 @@ std::vector<syntaxNode> itterateArguments(std::string type, std::vector<syntaxNo
   std::vector<syntaxNode> returnVec = {};
   if(type == "function")
   {
-    std::cout << "itter args\n";
+    //std::cout << "itter args\n";
     for (std::size_t i = 0; i < arguments.size(); ++i)
     {
-      std::cout << "ARG : " << arguments[i]._syntax << '\n';
+      //std::cout << "ARG : " << arguments[i]._syntax << '\n';
       if (!arguments[i]._arguments.empty())
       {
         if (arguments[i]._type != "literal")
@@ -157,7 +158,7 @@ std::vector<syntaxNode> itterateArguments(std::string type, std::vector<syntaxNo
           while(!arguments[i]._scope.empty())
           {
             std::vector<syntaxNode> defaultVec = {};
-            itterateScopeRecursion(arguments[i], defaultVec);
+            itterateScope(arguments[i], defaultVec);
           }
           return returnVec;
         }
@@ -203,7 +204,7 @@ std::vector<syntaxNode> itterateArguments(std::string type, std::vector<syntaxNo
           while(!arguments[i]._scope.empty())
           {
             std::vector<syntaxNode> defaultVec = {};
-            itterateScopeRecursion(arguments[i], defaultVec);
+            itterateScope(arguments[i], defaultVec);
           }
           return returnVec;
         }
@@ -229,6 +230,7 @@ void insertConditionFlag(std::string flag)
 std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNode> & userArguments)
 {
   //SCOPES
+  //std::cout << currentScope._syntax << " current Scope!\n";
   if (currentScope._syntax == "if")//Check if syntax is a scope then recurse if statement true
   {
     if (itterateArguments(currentScope._type, currentScope._arguments)[0]._syntax != "1")
@@ -282,14 +284,14 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
     std::vector<syntaxNode> functionArgs;
     if (currentScope._type == "function" && currentScope.scopeIndex == 0)
     {
-      std::cout << currentScope._syntax << " == type func\n";
+      //std::cout << currentScope._syntax << " == type func\n";
       //std::cout << "is Function 2!!!\n";
       insertConditionFlag("function");
       functionArgs = itterateArguments(currentScope._type, userArguments, currentScope);
     }
     else
     {
-      std::cout << currentScope._syntax << " != type func\n";
+      //std::cout << currentScope._syntax << " != type func\n";
       functionArgs = itterateArguments(currentScope._scope[currentScope.scopeIndex]._type, currentScope._scope[currentScope.scopeIndex]._arguments);
     }
     ++scopeDepth;

@@ -8,6 +8,6 @@ exec("yesOrNo", "userInput", "test2")
 	print("end -- JAG`n");
 ^
 
-print("input: -- JAG`n");
+print("yes or no: -- JAG`n");
 
-yesOrNo(input, print("test"));
+yesOrNo(input, print("test`n"));
