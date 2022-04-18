@@ -39,6 +39,7 @@ public:
   std::vector<syntaxNode>  _arguments;  // arguments for the scope ex: (arg1, arg2, arg3)
   std::vector<syntaxNode> _scope;  // the queue of syntax nodes within the scope of this syntaxNode -- if it is empy it returns to the parent syntax node.
   std::size_t scopeIndex = 0;
+  syntaxNode * _parent = nullptr;
 };
 
 //Variables
@@ -96,7 +97,7 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
 
 std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNode> & userArguments);
 
-void itterateScope(syntaxNode currentSyntax, std::vector<syntaxNode> & userArguments);  //itterate recursively through syntax tree
+std::string itterateScope(syntaxNode currentSyntax, std::vector<syntaxNode> & userArguments);  //itterate recursively through syntax tree
 
 std::vector<syntaxNode> itterateArguments(std::string type, std::vector<syntaxNode> & arguments, syntaxNode userFunction = syntaxNode());  //itterate through arguments
 
@@ -120,9 +121,12 @@ std::string less(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxN
 std::string greater(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 std::string greaterOrEqual(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 std::string lessOrEqual(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
+
 //User Functions
 std::string functionInstantiateMethod(VarMap& scriptVariables, syntaxNode Instantiation, std::vector<syntaxNode>& functions, std::vector<syntaxNode> arguments);
+
 //Standard library functions
+std::string concatenateMethod(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 void printMethod(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 std::string inputMethod(VarMap& scriptVariables, std::vector<syntaxNode> arguments );
 

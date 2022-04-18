@@ -1,27 +1,26 @@
-VAR("itterator", "0");
-VAR("exponentBaseValue", "0");
-VAR("exponentproduct", "0");
-VAR("exponentAmmount", "0");
-
-exec("exponentRecursion")
+exec("exponentRecursion", "itterator", "exponentBaseValue", "exponentproduct", "exponentAmmount")
 	if(less(itterator, subtract(exponentAmmount, "1")))
 		set("exponentproduct", multiply(exponentproduct, exponentBaseValue));
 		set("itterator", add(itterator, "1"));
-		exponentRecursion;
+		exponentRecursion(itterator, exponentBaseValue, exponentproduct, exponentAmmount);
 	^
+	return( exponentproduct );
 ^
 
-exec("exponent")
-	set("itterator", "0");
-	set("exponentproduct", exponentBaseValue);
-	exponentRecursion;
+exec("exponent","Base","exponentAmm")
+	return(exponentRecursion("0", Base, Base, exponentAmm));
 ^
 
-print("Enter an base : ");
-input("exponentBaseValue");
-print("Enter an exponent : ");
-input("exponentAmmount");
 
-exponent;
+input("inputBase")
+	VAR("inputBase", "0");
+	print("`nEnter a Base : ");
+^
 
-print("Exponent product = ", exponentproduct, "`n");
+input("inputExponent")
+	VAR("inputExponent", "0");
+	print("`nEnter an Exponent : ");
+^
+
+
+print(concatenate("`nExponent product : ", exponent( inputBase, inputExponent ), "`n"));

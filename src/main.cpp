@@ -2,15 +2,17 @@
 
 /* TODO:
 
- - implement functions.
+ - implement modules
+ - make tokenizer more robust
+ - add number tokenizer support so you dont have to put numbers in quotation marks
 
  BUGS:
 
- - User functions call arguments more than once
+ - Comments cause issues in tokenizer
 
 */
 
-const std::string VERSION = "0.10.18";
+const std::string VERSION = "0.11.18";
 
 int main (int argc, char* argv[])
 {

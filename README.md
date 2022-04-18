@@ -1,4 +1,4 @@
-# Jagged VERSION 0.10.18
+# Jagged VERSION 0.11.18
 **Jagged** is a scripting language that aims to be intuitive and fun for small and large projects.
 
 # Special Behaviors

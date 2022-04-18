@@ -8,7 +8,7 @@ std::vector<discVariable> scriptDiscVariables;
 std::vector<syntaxNode> functions;
 std::vector<std::string> conditionDepthFlag;
 unsigned scopeDepth = 0;
-
+syntaxNode currentFunction = syntaxNode();
 syntaxNode::syntaxNode(){}
 syntaxNode::syntaxNode(std::string type, std::string syntax, std::string data):_type(std::move(type)),_syntax(std::move(syntax)),_data(std::move(data)){}
 syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
@@ -20,6 +20,10 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     if (syntax._syntax == "print")
     {
       printMethod(scriptVariables, syntax, arguments, currentScope);
+    }
+    if (syntax._syntax == "concatenate")
+    {
+      return syntaxNode("literal", concatenateMethod(scriptVariables, syntax, arguments, currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "input")
     {
@@ -89,6 +93,10 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     {
       return syntaxNode("literal", functionInstantiateMethod(scriptVariables, syntax, functions, arguments),syntax._syntax);
     }
+    else if (syntax._syntax == "return")
+    {
+      return syntaxNode("literal", parseArguments(scriptVariables, 0, syntax, arguments, currentScope), "returning");
+    }
     else if (syntax._syntax == "if")
     {return syntax;}
     else if (syntax._syntax == "elif")
@@ -101,8 +109,7 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
       {
         if (i._syntax == syntax._syntax)
         {
-          itterateScope(i, syntax._arguments);
-          break;
+          return syntaxNode("literal", itterateScope(i, syntax._arguments), syntax._syntax);
         }
       }
     }
@@ -118,6 +125,7 @@ std::vector<syntaxNode> itterateArguments(std::string type, std::vector<syntaxNo
     //std::cout << "itter args\n";
     for (std::size_t i = 0; i < arguments.size(); ++i)
     {
+      //if (arguments[i]._parent != nullptr)std::cout << "\n" << arguments[i]._parent->_syntax << " <- Parrent\n" << arguments[i]._syntax << " <- Child\n";
       //std::cout << "ARG : " << arguments[i]._syntax << '\n';
       if (!arguments[i]._arguments.empty())
       {
@@ -229,8 +237,11 @@ void insertConditionFlag(std::string flag)
 }
 std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNode> & userArguments)
 {
+  //if (currentScope._parent != nullptr)std::cout << "\n" << currentScope._parent->_syntax << " <- Parrent\n" << currentScope._syntax << " <- Child\n";
   //SCOPES
   //std::cout << currentScope._syntax << " current Scope!\n";
+  syntaxNode ReturnValue;
+  std::string ReturnString = "";
   if (currentScope._syntax == "if")//Check if syntax is a scope then recurse if statement true
   {
     if (itterateArguments(currentScope._type, currentScope._arguments)[0]._syntax != "1")
@@ -263,6 +274,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
   }
   while (currentScope.scopeIndex < currentScope._scope.size())
   {
+    
     if (currentScope._syntax == "exec")//Check if syntax is a scope then recurse if statement true
     {
       bool functionInstantiated = false;
@@ -274,7 +286,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
           break;
         }
       }
-      if (functionInstantiated == false)
+      if (functionInstantiated == false && currentScope._type != "function")
       {
         parseSyntax(currentScope, itterateArguments(currentScope._type, currentScope._arguments), currentScope._scope);
         ++currentScope.scopeIndex;
@@ -282,32 +294,59 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
       }
     }
     std::vector<syntaxNode> functionArgs;
-    if (currentScope._type == "function" && currentScope.scopeIndex == 0)
+    ++scopeDepth;
+    if (currentScope._type == "function" && currentScope.scopeIndex == 0 && currentScope._arguments.size() > 1)
     {
       //std::cout << currentScope._syntax << " == type func\n";
       //std::cout << "is Function 2!!!\n";
+      //std::cout << "is Function!!!\n";
+      currentFunction = currentScope;
       insertConditionFlag("function");
+      //std::cout << "\n\n FUNCTION!!! " << currentScope._type << "\n\n";
       functionArgs = itterateArguments(currentScope._type, userArguments, currentScope);
+     
+      ReturnValue = parseSyntax(currentScope._scope[currentScope.scopeIndex], functionArgs, currentScope._scope[currentScope.scopeIndex]._scope);
+      ReturnString = itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex], userArguments);
+    }
+    if (currentScope._scope[currentScope.scopeIndex]._type != "functionCall")
+    {
+      //std::cout << "\nis not Function!!!\n";
+      //std::cout << "\nsyntax->" << currentScope._scope[currentScope.scopeIndex]._syntax << "\n";
+      //std::cout << "type->" << currentScope._scope[currentScope.scopeIndex]._type << "\n";
+      functionArgs = itterateArguments(currentScope._scope[currentScope.scopeIndex]._type, currentScope._scope[currentScope.scopeIndex]._arguments);
+      
+      ReturnString = itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex], userArguments);
+      ReturnValue = parseSyntax(currentScope._scope[currentScope.scopeIndex], functionArgs, currentScope._scope[currentScope.scopeIndex]._scope);
     }
     else
     {
-      //std::cout << currentScope._syntax << " != type func\n";
-      functionArgs = itterateArguments(currentScope._scope[currentScope.scopeIndex]._type, currentScope._scope[currentScope.scopeIndex]._arguments);
+      /*std::cout << "test!!!!\n";
+      insertConditionFlag("function");*/
+      //functionArgs = itterateArguments(currentScope._type, userArguments, currentScope);
+      
+      ReturnValue = parseSyntax(currentScope._scope[currentScope.scopeIndex], userArguments, currentScope._scope[currentScope.scopeIndex]._scope);
+      //itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex], userArguments);
+      
     }
-    ++scopeDepth;
+    
     //std::cout << " segf 1\n" << currentScope._scope[currentScope.scopeIndex]._syntax << " - syntax\n" << currentScope._scope[currentScope.scopeIndex]._arguments[0]._syntax << " - arg\n";
-    itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex], userArguments);
+    
     //std::cout << " segf 2\n";
 
-    parseSyntax(currentScope._scope[currentScope.scopeIndex], functionArgs, currentScope._scope[currentScope.scopeIndex]._scope);
+    
+    //std::cout << currentScope._syntax << "\n";
     ++currentScope.scopeIndex;
     --scopeDepth;
+    //std::cout << ReturnValue._data << "\n";
+    if (ReturnValue._data == "returning")
+    {
+      return ReturnValue._syntax;
+    }
   }
-
   return currentScope._type;
 }
 
-void  itterateScope(syntaxNode currentSyntax, std::vector<syntaxNode> & userArguments)
+std::string  itterateScope(syntaxNode currentSyntax, std::vector<syntaxNode> & userArguments)
 {
   currentSyntax.scopeIndex = 0;
   /*if (currentSyntax._type == "function")
@@ -315,6 +354,6 @@ void  itterateScope(syntaxNode currentSyntax, std::vector<syntaxNode> & userArgu
     //std::cout << "is Function 1!!!\n";
     itterateArguments(currentSyntax._type, userArguments, currentSyntax);
   }*/
-  itterateScopeRecursion(currentSyntax, userArguments);
-  return;
+  return itterateScopeRecursion(currentSyntax, userArguments);
+  
 }

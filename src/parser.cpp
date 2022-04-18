@@ -1,5 +1,7 @@
 #include "parser.hpp"
 
+//TOKENIZER
+
 std::vector<std::string> scopeLookupTable =
 {
   "exec",
@@ -20,6 +22,8 @@ std::vector<std::string> grammarLookupTable =
   "DISC",
   "set",
   "add",
+  "concatenate",
+  "return",
   "subtract",
   "multiply",
   "divide",
@@ -35,14 +39,23 @@ bool isQuoting = false;
 bool isComment = false;
 unsigned argScope = 0;
 
+bool isFloat( std::string myString ) {
+    std::istringstream iss(myString);
+    float f;
+    iss >> std::noskipws >> f; // noskipws considers leading whitespace invalid
+    // Check the entire string was consumed and if either failbit or badbit is set
+    return iss.eof() && !iss.fail(); 
+}
+
 void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool isArgument)
 {
   if (grammar != "")  //grammar pushed to arguments
   {
     syntaxNode nextSyntax;
     nextSyntax._syntax = grammar;
+    nextSyntax._parent = scopeStack.top();
     grammarExists = false;
-    if (isQuoting)
+    if (isQuoting || isFloat( grammar ))
     {
       literalLookupTable.push_back(grammar);
       nextSyntax._type = "literal";
@@ -98,7 +111,7 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
       else
       {
         variableLookupTable.push_back(grammar);
-        nextSyntax._type = "scope";
+        nextSyntax._type = "functionCall";
         scopeStack.top()->_scope.push_back(nextSyntax);
       }
     }
@@ -159,21 +172,22 @@ int scanSource(std::string& source)
     {
       switch (character)
       {
+        case '\n':
+          break;
         case ' ':
           parseGrammar(scopeStack, keyword, isArgument);
           keyword = "";
           break;
-        case '\n':
-          break;
         case '\t':
+          
           break;
         case '\r':
           break;
-        case '.':
+        /*case '.':
           parseGrammar(scopeStack, keyword, isArgument);
           scopeStack.pop();
           keyword = "";
-          break;
+          break;*/
         case '=':
           parseGrammar(scopeStack, keyword, isArgument);
           keyword = "";

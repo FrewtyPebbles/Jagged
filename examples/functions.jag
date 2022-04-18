@@ -44,21 +44,20 @@ exec("recursionExample")
   ^
 ^
 
-VAR("userInput", input)
-  print("enter a number from 1 to 4:");
-^
+print("enter a number from 1 to 4:");
+VAR("userInput", input);
 print("function # ", userInput, " :`n");
 
 if (equal(userInput, "1"))
   plus;
 ^
-if (equal(userInput, "2"))
+elif (equal(userInput, "2"))
   minus;
 ^
-if (equal(userInput, "3"))
+elif (equal(userInput, "3"))
   times;
 ^
-if (equal(userInput, "4"))
+elif (equal(userInput, "4"))
   fraction;
 ^
 
