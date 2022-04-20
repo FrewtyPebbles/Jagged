@@ -7,7 +7,7 @@
  - *Back-Parsing* - This lets you parse your code backwards using the ***^*** keyword.
 
  - *String Write Variables* - To call variables to write to, you reference them as a string literal. This means you can also write to variables specified by the return value of functions.
- - *Argumentless Function Calling* - Some standard library functions can be called with no arguments and exhibit special behavior.  For instance: if the _input_ function is called without any arguments it will return the inputted value without storing it in a variable.  It will also return the inputted value if there is a variable provided.
+ - *Argumentless Function Calling* - Some standard library functions can be called with no arguments and exhibit diferent behavior.  For instance: if the _input_ function is called without any arguments it will return the inputted value without storing it in a variable.  It will also return the inputted value if there is a variable provided.
 
 # Standard Functionality
 
