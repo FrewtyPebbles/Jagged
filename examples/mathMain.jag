@@ -1,5 +1,7 @@
-module<math;
-module<fun;
+stlMath
+fun
+stlAlgo
+ENDINC
 
 input("inputBase")
 	VAR("inputBase", "0");
@@ -11,6 +13,7 @@ input("inputExponent")
 	print("`nEnter an Exponent : ");
 ^
 
-
+ping;
+ping;
 
 print(concatenate("`nExponent product : ", makeMoney(exponent( inputBase, inputExponent )), "`n"));

@@ -1,4 +1,4 @@
-# Jagged v0.12.18
+# Jagged v0.12.19
 **Jagged** is a scripting language that aims to be intuitive and fun for small and large projects.
 
 # Special Behaviors
@@ -16,6 +16,6 @@
  - *Character Stream Based Interpreter* - The interpreter reads the code character by character, allowing for flexible formatting.
 
 # Bug List
- - Modules are newly implemented in _v0.12.18_ but are verry buggy.
- - _print_ functions call inside function declarations in modules (functions are safe, just return strings for printing with the return() keyword).
- - The order that modules are called in can sometimes cause bugs.
+Please Email _William.Lim@csu.fullerton.edu If you find any bugs!
+
+ - Comments have bugs and are not recommended to be used at the moment.

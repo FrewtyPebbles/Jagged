@@ -1,3 +1,5 @@
+STARTMOD
+
 # Number Functions:
 exec("plus")
   print("Adding the numbers 5 and 2...`n");

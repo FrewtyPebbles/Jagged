@@ -9,11 +9,10 @@
  BUGS:
 
  - Comments cause issues in tokenizer
- - Modules have ordering bug when multiple calls in certain order from a main file.
 
 */
 
-const std::string VERSION = "0.12.18";
+const std::string VERSION = "0.12.19";
 
 int main (int argc, char* argv[])
 {
@@ -21,13 +20,16 @@ int main (int argc, char* argv[])
 
   if (argc > 1)
   {
+    std::stack<syntaxNode*> scopeStack = {};
+    scopeStack.push(new syntaxNode("global","global","global"));
+    std::string moduleContent;
     std::ifstream sourceFile(argv[1], std::ifstream::in);
     std::stringstream source;
     source << sourceFile.rdbuf();
-    input = "\n" + source.str();
-    std::stack<syntaxNode*> scopeStack = {};
-    scopeStack.push(new syntaxNode("global","global","global"));
-    scanSource(input, scopeStack);
+    sourceFile.close();
+    moduleContent = "\n" + source.str();
+    //std::cout << getFileContent(moduleContent);
+    scanSource(getFileContent(moduleContent), scopeStack);
   }
   else
   {
@@ -36,10 +38,11 @@ int main (int argc, char* argv[])
     {
       std::cout << "§";
       getline(std::cin, input);
-      input = "\n" + input;
+      input = "\nSTARTMOD\n" + input;
       std::stack<syntaxNode*> scopeStack = {};
       scopeStack.push(new syntaxNode("global","global","global"));
-      scanSource(input, scopeStack);
+      //std::cout << getFileContent(input);
+      scanSource(getFileContent(input), scopeStack);
     }
   }
 }

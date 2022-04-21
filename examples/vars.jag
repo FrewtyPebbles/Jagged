@@ -1,3 +1,5 @@
+STARTMOD
+
 print("Set the value:");
 VAR("test", input);
 print("The current value is : ", test, "`nEnter a number to add to it : ");

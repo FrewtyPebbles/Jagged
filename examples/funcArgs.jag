@@ -1,3 +1,5 @@
+STARTMOD
+
 # NOTICE : Function arguments / parameters are currently still in beta and are buggy
 exec("yesOrNo", "userInput")
 	if(equal(userInput, "yes"))

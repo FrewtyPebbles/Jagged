@@ -44,7 +44,7 @@ bool isFloat( std::string myString ) {
     float f;
     iss >> std::noskipws >> f; // noskipws considers leading whitespace invalid
     // Check the entire string was consumed and if either failbit or badbit is set
-    return iss.eof() && !iss.fail(); 
+    return iss.eof() && !iss.fail();
 }
 
 void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool isArgument)
@@ -127,11 +127,10 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
   }
 }
 
-int scanSource(std::string& source, std::stack<syntaxNode*> & scopeStack)
+int scanSource(std::string source, std::stack<syntaxNode*> & scopeStack)
 {
   std::string keyword;
   bool isArgument = false;
-  bool moduleGrammar = false;
   char lastChar;
   for(char character : source)
   {
@@ -260,12 +259,7 @@ int scanSource(std::string& source, std::stack<syntaxNode*> & scopeStack)
           keyword = "";
           break;
         case '<':
-          if (keyword == "module")
-          {
-            moduleGrammar = true;
-          }
-          else
-            parseGrammar(scopeStack, keyword, isArgument);
+          parseGrammar(scopeStack, keyword, isArgument);
           keyword = "";
           break;
         case '>':
@@ -277,22 +271,8 @@ int scanSource(std::string& source, std::stack<syntaxNode*> & scopeStack)
           keyword = "";
           break;
         case ';':
-          if (moduleGrammar == true)
-          {
-            std::string moduleContent;
-            std::ifstream sourceFile(keyword + ".jag", std::ifstream::in);
-            std::stringstream source;
-            source << sourceFile.rdbuf();
-            moduleContent = "\n" + source.str();
-            std::cout << moduleContent;
-            scanSource(moduleContent, scopeStack);
-            moduleGrammar = false;
-          }
-          else
-          {
           parseGrammar(scopeStack, keyword, isArgument);
           scopeStack.pop();
-          }
           keyword = "";
           break;
         case '%':
@@ -337,4 +317,42 @@ int scanSource(std::string& source, std::stack<syntaxNode*> & scopeStack)
   std::vector<syntaxNode> defaultVec = {};
   itterateScope(*scopeStack.top(), defaultVec);
   return 0;
+}
+
+std::string getFileContent(std::string fileContent)
+{
+  std::string Keyword;
+  std::stringstream Content;
+  bool isReading = false;
+  //std::cout << fileContent << "<-CONTENT\n";
+  for(char fileCharacter : fileContent)
+  {
+    //std::cout << fileCharacter << " < - char\n";
+    if (isReading == true)
+    {
+      Content << std::string( 1, fileCharacter );
+    }
+    else if (fileCharacter == '\n' && (Keyword == "STARTMOD" || Keyword == "ENDINCLUDES" || Keyword == "ENDINC" || Keyword == "INCLUDES") && isReading == false)
+    {
+      isReading = true;
+      Keyword = "";
+    }
+    else if (fileCharacter == '\n' && isReading == false && Keyword != "" && Keyword != "\n")
+    {
+      //std::cout << Keyword << "<-file\n";
+      std::string moduleContent;
+      std::ifstream moduleFile(Keyword + ".jag", std::ifstream::in);
+      std::stringstream source;
+      source << moduleFile.rdbuf();
+      //moduleFile.close();
+      moduleContent = "\n" + source.str();
+      //std::cout << moduleContent;
+      Content << "\n" << getFileContent(moduleContent) << "\n";
+      Keyword = "";
+    }
+    if (fileCharacter != '\r' && fileCharacter != '\n')
+    Keyword += fileCharacter;
+  }
+  //std::cout << Content.str();
+  return Content.str();
 }

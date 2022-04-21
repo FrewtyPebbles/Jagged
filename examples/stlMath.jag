@@ -1,3 +1,5 @@
+STARTMOD
+
 exec("exponentRecursion", "itterator", "exponentBaseValue", "exponentproduct", "exponentAmmount")
 	if(less(itterator, subtract(exponentAmmount, "1")))
 		set("exponentproduct", multiply(exponentproduct, exponentBaseValue));
@@ -10,5 +12,3 @@ exec("exponentRecursion", "itterator", "exponentBaseValue", "exponentproduct", "
 exec("exponent","Base","exponentAmm")
 	return(exponentRecursion("0", Base, Base, exponentAmm));
 ^
-
-

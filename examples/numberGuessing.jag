@@ -1,3 +1,4 @@
+STARTMOD
 #VARIABLES
 VAR("userInput", "none");
 VAR("score", "0");
