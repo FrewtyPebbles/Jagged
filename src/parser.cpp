@@ -127,13 +127,11 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
   }
 }
 
-int scanSource(std::string& source)
+int scanSource(std::string& source, std::stack<syntaxNode*> & scopeStack)
 {
   std::string keyword;
   bool isArgument = false;
-
-  std::stack<syntaxNode*> scopeStack = {};
-  scopeStack.push(new syntaxNode("global","global","global"));
+  bool moduleGrammar = false;
   char lastChar;
   for(char character : source)
   {
@@ -179,15 +177,9 @@ int scanSource(std::string& source)
           keyword = "";
           break;
         case '\t':
-          
           break;
         case '\r':
           break;
-        /*case '.':
-          parseGrammar(scopeStack, keyword, isArgument);
-          scopeStack.pop();
-          keyword = "";
-          break;*/
         case '=':
           parseGrammar(scopeStack, keyword, isArgument);
           keyword = "";
@@ -268,7 +260,12 @@ int scanSource(std::string& source)
           keyword = "";
           break;
         case '<':
-          parseGrammar(scopeStack, keyword, isArgument);
+          if (keyword == "module")
+          {
+            moduleGrammar = true;
+          }
+          else
+            parseGrammar(scopeStack, keyword, isArgument);
           keyword = "";
           break;
         case '>':
@@ -280,8 +277,22 @@ int scanSource(std::string& source)
           keyword = "";
           break;
         case ';':
+          if (moduleGrammar == true)
+          {
+            std::string moduleContent;
+            std::ifstream sourceFile(keyword + ".jag", std::ifstream::in);
+            std::stringstream source;
+            source << sourceFile.rdbuf();
+            moduleContent = "\n" + source.str();
+            std::cout << moduleContent;
+            scanSource(moduleContent, scopeStack);
+            moduleGrammar = false;
+          }
+          else
+          {
           parseGrammar(scopeStack, keyword, isArgument);
           scopeStack.pop();
+          }
           keyword = "";
           break;
         case '%':
@@ -325,6 +336,5 @@ int scanSource(std::string& source)
   }
   std::vector<syntaxNode> defaultVec = {};
   itterateScope(*scopeStack.top(), defaultVec);
-  scopeStack.pop();
   return 0;
 }

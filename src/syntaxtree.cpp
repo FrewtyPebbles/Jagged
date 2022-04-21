@@ -31,7 +31,6 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     }
     else if (syntax._syntax == "add")
     {
-      //std::cout << "add : " << addNums(scriptVariables, syntax, arguments, currentScope) << '\n';
       return syntaxNode("literal", addNums(scriptVariables, syntax, arguments, currentScope),syntax._syntax);
     }
     else if (syntax._syntax == "subtract")

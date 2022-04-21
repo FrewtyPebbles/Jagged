@@ -12,15 +12,3 @@ exec("exponent","Base","exponentAmm")
 ^
 
 
-input("inputBase")
-	VAR("inputBase", "0");
-	print("`nEnter a Base : ");
-^
-
-input("inputExponent")
-	VAR("inputExponent", "0");
-	print("`nEnter an Exponent : ");
-^
-
-
-print(concatenate("`nExponent product : ", exponent( inputBase, inputExponent ), "`n"));

@@ -9,10 +9,11 @@
  BUGS:
 
  - Comments cause issues in tokenizer
+ - Modules have ordering bug when multiple calls in certain order from a main file.
 
 */
 
-const std::string VERSION = "0.11.18";
+const std::string VERSION = "0.12.18";
 
 int main (int argc, char* argv[])
 {
@@ -24,7 +25,9 @@ int main (int argc, char* argv[])
     std::stringstream source;
     source << sourceFile.rdbuf();
     input = "\n" + source.str();
-    scanSource(input);
+    std::stack<syntaxNode*> scopeStack = {};
+    scopeStack.push(new syntaxNode("global","global","global"));
+    scanSource(input, scopeStack);
   }
   else
   {
@@ -34,7 +37,9 @@ int main (int argc, char* argv[])
       std::cout << "§";
       getline(std::cin, input);
       input = "\n" + input;
-      scanSource(input);
+      std::stack<syntaxNode*> scopeStack = {};
+      scopeStack.push(new syntaxNode("global","global","global"));
+      scanSource(input, scopeStack);
     }
   }
 }

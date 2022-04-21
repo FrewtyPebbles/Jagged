@@ -1,4 +1,4 @@
-# Jagged VERSION 0.11.18
+# Jagged v0.12.18
 **Jagged** is a scripting language that aims to be intuitive and fun for small and large projects.
 
 # Special Behaviors
@@ -14,3 +14,8 @@
  - *User Defined Functions and Returns* - Using the _exec("func name", "argument")_ and _return(value)_ function, users can define their own functions.
  - *Return Values For Functions* - Standard library and user defined functions can be called as arguments of other functions.  The argument parsed will be the return value of the function provided.
  - *Character Stream Based Interpreter* - The interpreter reads the code character by character, allowing for flexible formatting.
+
+# Bug List
+ - Modules are newly implemented in _v0.12.18_ but are verry buggy.
+ - _print_ functions call inside function declarations in modules (functions are safe, just return strings for printing with the return() keyword).
+ - The order that modules are called in can sometimes cause bugs.

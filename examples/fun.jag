@@ -1,0 +1,7 @@
+
+exec("makeMoney", "ammount")
+	return(concatenate("$", ammount));
+^
+exec("ping")
+	return("pong");
+^

@@ -3,6 +3,6 @@
 
 
 
-int scanSource(std::string& source);
+int scanSource(std::string& source, std::stack<syntaxNode*> & scopeStack);
 
 void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool isArgument);
