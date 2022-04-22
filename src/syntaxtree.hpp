@@ -17,6 +17,7 @@
 #include <algorithm> //find()
 #include <memory>
 #include <unordered_map>
+#include <stdexcept>
 #pragma once
 
 /*pseudo

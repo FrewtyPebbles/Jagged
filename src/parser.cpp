@@ -341,13 +341,21 @@ std::string getFileContent(std::string fileContent)
     {
       //std::cout << Keyword << "<-file\n";
       std::string moduleContent;
-      std::ifstream moduleFile(Keyword + ".jag", std::ifstream::in);
       std::stringstream source;
-      source << moduleFile.rdbuf();
-      //moduleFile.close();
-      moduleContent = "\n" + source.str();
-      //std::cout << moduleContent;
-      Content << "\n" << getFileContent(moduleContent) << "\n";
+      try{
+        std::ifstream moduleFile(Keyword + ".jag", std::ifstream::in);
+        moduleFile.exceptions ( std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit );
+        source << moduleFile.rdbuf();
+        moduleFile.close();
+        moduleContent = "\n" + source.str();
+        //std::cout << moduleContent;
+        Content << "\n" << getFileContent(moduleContent) << "\n";
+
+      }
+      catch(std::exception const& e)
+      {
+        std::cout << "\n (PREPROCESSOR) !ERROR! > MODULE NOT FOUND : " << Keyword << ".jag\nMake sure your file path is relative to the compiler and didnt include an extension!\n\n";
+      }
       Keyword = "";
     }
     if (fileCharacter != '\r' && fileCharacter != '\n')

@@ -1,6 +1,6 @@
-stlMath
-fun
-stlAlgo
+examples/stlMath
+examples/fun
+examples/stlAlgo
 ENDINC
 
 input("inputBase")
