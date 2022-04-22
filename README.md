@@ -16,6 +16,6 @@
  - *Character Stream Based Interpreter* - The interpreter reads the code character by character, allowing for flexible formatting.
 
 # Bug List
-Please Email _William.Lim@csu.fullerton.edu If you find any bugs!
+Please Email _William.Lim@csu.fullerton.edu_ If you find any bugs!
 
  - Comments have bugs and are not recommended to be used at the moment.
