@@ -21,6 +21,7 @@ std::vector<std::string> grammarLookupTable =
   "FIX",
   "DISC",
   "set",
+  "index",
   "add",
   "concatenate",
   "return",
@@ -170,12 +171,16 @@ int scanSource(std::string source, std::stack<syntaxNode*> & scopeStack)
       switch (character)
       {
         case '\n':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
           break;
         case ' ':
           parseGrammar(scopeStack, keyword, isArgument);
           keyword = "";
           break;
         case '\t':
+          parseGrammar(scopeStack, keyword, isArgument);
+          keyword = "";
           break;
         case '\r':
           break;

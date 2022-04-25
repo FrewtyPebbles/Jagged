@@ -3,9 +3,9 @@
 //variables and function storage
 //std::vector<Variable> scriptVariables;
 VarMap scriptVariables;
+funcMap functions;
 std::vector<constantVariable> scriptConstantVariables;
 std::vector<discVariable> scriptDiscVariables;
-std::vector<syntaxNode> functions;
 std::vector<std::string> conditionDepthFlag;
 unsigned scopeDepth = 0;
 syntaxNode currentFunction = syntaxNode();
@@ -68,6 +68,10 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     {
       setMethod(&scriptVariables[arguments[0]._syntax], scriptVariables,syntax,arguments,currentScope);// sets arg 0 variable to arg 1
     }
+    else if (syntax._syntax == "index")
+    {
+      return syntaxNode("literal", readVarIndexMethod(&scriptVariables[arguments[0]._syntax], scriptVariables,syntax,arguments,currentScope),syntax._syntax);// sets arg 0 variable to arg 1
+    }
     else if (syntax._syntax == "equal")
     {
       return syntaxNode("literal", equal(scriptVariables,syntax,arguments,currentScope),syntax._syntax);
@@ -104,13 +108,7 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
     {return syntax;}
     else
     {
-      for(syntaxNode i : functions)
-      {
-        if (i._syntax == syntax._syntax)
-        {
-          return syntaxNode("literal", itterateScope(i, syntax._arguments), syntax._syntax);
-        }
-      }
+      return syntaxNode("literal", itterateScope(functions[syntax._syntax], syntax._arguments), syntax._syntax);
     }
   }
   return syntax;
@@ -277,9 +275,9 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
     if (currentScope._syntax == "exec")//Check if syntax is a scope then recurse if statement true
     {
       bool functionInstantiated = false;
-      for(syntaxNode i : functions)
+      for(auto i : functions)
       {
-        if (i._syntax == currentScope._arguments[0]._syntax)
+        if (i.first == currentScope._arguments[0]._syntax)
         {
           functionInstantiated = true;
           break;

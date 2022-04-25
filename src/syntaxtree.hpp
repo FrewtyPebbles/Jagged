@@ -53,7 +53,7 @@ private:
 public:
   Variable();
   Variable(syntaxNode _instantiatedScope, std::string _varName, std::vector<std::string> _data);
-  void setVariable(std::string _varValue);
+  void setVariable(std::string _varValue, std::size_t index = 0);
   void appendVariable(std::string _varValue);
   std::string& getVariableName();
   std::vector<std::string>& getVariableValue();
@@ -89,6 +89,7 @@ public:
 };
 
 typedef std::unordered_map<std::string, Variable> VarMap;
+typedef std::unordered_map<std::string, syntaxNode> funcMap;
 
 
 
@@ -124,7 +125,7 @@ std::string greaterOrEqual(VarMap& scriptVariables, syntaxNode syntax, std::vect
 std::string lessOrEqual(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
 
 //User Functions
-std::string functionInstantiateMethod(VarMap& scriptVariables, syntaxNode Instantiation, std::vector<syntaxNode>& functions, std::vector<syntaxNode> arguments);
+std::string functionInstantiateMethod(VarMap& scriptVariables, syntaxNode Instantiation, funcMap& functions, std::vector<syntaxNode> arguments);
 
 //Standard library functions
 std::string concatenateMethod(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
@@ -134,3 +135,4 @@ std::string inputMethod(VarMap& scriptVariables, std::vector<syntaxNode> argumen
 //VARIABLE METHODS
 void varMethod(VarMap& scriptVariables, std::vector<syntaxNode> arguments);
 void setMethod(Variable * variableToSet, VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
+std::string readVarIndexMethod(Variable * variableToSet, VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);

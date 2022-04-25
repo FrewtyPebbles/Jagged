@@ -83,21 +83,27 @@ std::string inputMethod(VarMap& scriptVariables,  std::vector<syntaxNode> argume
     getline(std::cin, input);
     return input;
   }
-  else
+  else if (arguments.size() <= 1)
   {
     getline(std::cin, input);
-    scriptVariables[arguments[0]._syntax].setVariable(input);
+    scriptVariables[arguments[0]._syntax].setVariable(input,0);
+    return input;
+  }
+  else if (arguments.size() <= 3)
+  {
+    getline(std::cin, input);
+    scriptVariables[arguments[0]._syntax].setVariable(input, stoi(arguments[1]._syntax));
     return input;
   }
 }
 //FUNCTION METHODS
-std::string functionInstantiateMethod(VarMap& scriptVariables, syntaxNode Instantiation, std::vector<syntaxNode>& functions, std::vector<syntaxNode> arguments)
+std::string functionInstantiateMethod(VarMap& scriptVariables, syntaxNode Instantiation, funcMap & functions, std::vector<syntaxNode> arguments)
 {
   //return if function already instantiated so multiples arent created
-  for(syntaxNode i : functions)
+  /*for(syntaxNode i : functions)
   {
     if (i._syntax == arguments[0]._syntax) return "RETURN_VALUE";
-  }
+  }*/
   syntaxNode newFunction;
   newFunction._type = "function";
   newFunction._syntax = arguments[0]._syntax;
@@ -114,7 +120,7 @@ std::string functionInstantiateMethod(VarMap& scriptVariables, syntaxNode Instan
   newFunction._scope.push_back(syntaxNode("functionCall","__--NDF--__", "__--NDF--__"));//NULL DUMMY FUNCTION TO FIX DOUBLE ITTERATE ISSUE WHEN FUNCTION STARTS WITH IF.
   newFunction._scope.insert(newFunction._scope.end(), Instantiation._scope.begin(), Instantiation._scope.end());
   //newFunction._scope = Instantiation._scope;
-  functions.push_back(newFunction);
+  functions[arguments[0]._syntax] = newFunction;
   return arguments[0]._syntax;
 }
 //VARIABLE METHODS
@@ -128,5 +134,19 @@ void varMethod(VarMap& scriptVariables, std::vector<syntaxNode> arguments)
 
 void setMethod(Variable * variableToSet, VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {
-  variableToSet->setVariable(parseArguments(scriptVariables, 1, syntax, arguments, currentScope));
+  //if one arg or less
+  if (arguments.size() <= 1)
+  {
+  variableToSet->setVariable(parseArguments(scriptVariables, 1, syntax, arguments, currentScope),0);
+  }
+  else if (arguments.size() <= 2)
+  {
+  //if more than one arg
+  variableToSet->setVariable(parseArguments(scriptVariables, 1, syntax, arguments, currentScope), stoi(arguments[1]._syntax));
+  }
+}
+
+std::string readVarIndexMethod(Variable * variableToSet, VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+{
+  return scriptVariables[arguments[0]._syntax].getVariableValue()[stoi(arguments[1]._syntax)];
 }

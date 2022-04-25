@@ -1,6 +1,5 @@
-examples/stlMath
-examples/fun
-examples/stlAlgo
+stlMath
+fun
 ENDINC
 
 input("inputBase")

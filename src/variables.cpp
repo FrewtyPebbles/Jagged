@@ -9,7 +9,7 @@ varName(_varName),
 data(_data)
 {}
 
-void Variable::setVariable(std::string _varValue){data[0] = _varValue;}
+void Variable::setVariable(std::string _varValue,std::size_t index){data[index] = _varValue;}
 
 std::string& Variable::getVariableName()
 {
