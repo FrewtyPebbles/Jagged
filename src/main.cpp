@@ -9,10 +9,11 @@
  BUGS:
 
  - Comments cause issues in tokenizer
+ - User function arguments parse more than once
 
 */
 
-const std::string VERSION = "0.12.19";
+const std::string VERSION = "0.12.20";
 
 int main (int argc, char* argv[])
 {

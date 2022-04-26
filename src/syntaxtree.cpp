@@ -285,7 +285,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
       }
       if (functionInstantiated == false && currentScope._type != "function")
       {
-        parseSyntax(currentScope, itterateArguments(currentScope._type, currentScope._arguments), currentScope._scope);
+        //parseSyntax(currentScope, itterateArguments(currentScope._type, currentScope._arguments), currentScope._scope);
         ++currentScope.scopeIndex;
         return currentScope._type;
       }
@@ -294,6 +294,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
     ++scopeDepth;
     if (currentScope._type == "function" && currentScope.scopeIndex == 0 && currentScope._arguments.size() > 1)
     {
+      //std::cout << "option1\n";
       currentFunction = currentScope;
       insertConditionFlag("function");
       functionArgs = itterateArguments(currentScope._type, userArguments, currentScope);
@@ -303,23 +304,15 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
     }
     if (currentScope._scope[currentScope.scopeIndex]._type != "functionCall")
     {
-      //std::cout << "\nis not Function!!!\n";
-      //std::cout << "\nsyntax->" << currentScope._scope[currentScope.scopeIndex]._syntax << "\n";
-      //std::cout << "type->" << currentScope._scope[currentScope.scopeIndex]._type << "\n";
+      //std::cout << "option2\n";
       functionArgs = itterateArguments(currentScope._scope[currentScope.scopeIndex]._type, currentScope._scope[currentScope.scopeIndex]._arguments);
-
       ReturnString = itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex], userArguments);
       ReturnValue = parseSyntax(currentScope._scope[currentScope.scopeIndex], functionArgs, currentScope._scope[currentScope.scopeIndex]._scope);
     }
     else
     {
-      /*std::cout << "test!!!!\n";
-      insertConditionFlag("function");*/
-      //functionArgs = itterateArguments(currentScope._type, userArguments, currentScope);
-
+      //std::cout << "option3\n";
       ReturnValue = parseSyntax(currentScope._scope[currentScope.scopeIndex], userArguments, currentScope._scope[currentScope.scopeIndex]._scope);
-      //itterateScopeRecursion(currentScope._scope[currentScope.scopeIndex], userArguments);
-
     }
 
     //std::cout << " segf 1\n" << currentScope._scope[currentScope.scopeIndex]._syntax << " - syntax\n" << currentScope._scope[currentScope.scopeIndex]._arguments[0]._syntax << " - arg\n";

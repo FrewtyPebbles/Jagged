@@ -8,12 +8,30 @@ exec("addItem", "item", "itemIndex")
 ^
 
 exec("getItem", "itemGetIndex")
-  return(index(Inventory, itemGetIndex));
+  print(index("Inventory", itemGetIndex), "`n");
 ^
 
-print("Input an item and its index:`n");
-addItem(input, input);
+exec("insertRecursion")
+  print("Input an item and its index:`n");
+  addItem(input, input);
+  print("Would you like to place another item in the inventory (y/n)`n");
+  if(equal(input,"y"))
+    insertRecursion;
+  ^
+^
+exec("extractRecursion")
+  print("Input an item index:`n");
+  getItem(input);
+  print("Would you like to check for another item in the inventory (y/n)`n");
+  if(equal(input,"y"))
+    extractRecursion;
+  ^
+^
 
-print("Input an item index:`n");
-index(Inventory, input);
-print(getItem(input));
+print("`nInsert Items into the inventory :`n`n");
+
+insertRecursion;
+
+print("`nInsert Items into the inventory :`n`n");
+
+extractRecursion;

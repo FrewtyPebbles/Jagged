@@ -2,7 +2,6 @@
 
 std::string parseArguments(VarMap & scriptVariables, unsigned argumentnum, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope, unsigned varIndex)
 {
-  std::cout << varIndex << " <- parseArguments Index\n";
   std::string argstr;
   if (arguments[argumentnum]._type == "variable")
   {
@@ -12,7 +11,7 @@ std::string parseArguments(VarMap & scriptVariables, unsigned argumentnum, synta
   {
     argstr = arguments[argumentnum]._syntax;
   }
-  std::cout << argstr << " <- parseArguments Index\n";
+
   return argstr;
 }
 
@@ -150,7 +149,5 @@ void setMethod(Variable * variableToSet, VarMap& scriptVariables, syntaxNode syn
 
 std::string readVarIndexMethod(Variable * variableToSet, VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {
-  std::cout << stoi(parseArguments(scriptVariables, 1, syntax, arguments, currentScope)) << " <- index\n";
-  std::cout << parseArguments(scriptVariables, 0, syntax, arguments, currentScope, stoi(parseArguments(scriptVariables, 1, syntax, arguments, currentScope))) << " <- indexResult\n";
-  return parseArguments(scriptVariables, 0, syntax, arguments, currentScope, stoi(parseArguments(scriptVariables, 1, syntax, arguments, currentScope)));
+  return scriptVariables[arguments[0]._syntax].getVariableValue()[stoi(parseArguments(scriptVariables, 1, syntax, arguments, currentScope))];
 }
