@@ -1,16 +1,18 @@
 #include "syntaxtree.hpp"
 
-std::string parseArguments(VarMap & scriptVariables, unsigned argumentnum, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
+std::string parseArguments(VarMap & scriptVariables, unsigned argumentnum, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope, unsigned varIndex)
 {
+  std::cout << varIndex << " <- parseArguments Index\n";
   std::string argstr;
   if (arguments[argumentnum]._type == "variable")
   {
-    argstr = scriptVariables[arguments[argumentnum]._syntax].getVariableValue()[0];
+    argstr = scriptVariables[arguments[argumentnum]._syntax].getVariableValue()[varIndex];
   }
   else if (arguments[argumentnum]._type == "literal")
   {
     argstr = arguments[argumentnum]._syntax;
   }
+  std::cout << argstr << " <- parseArguments Index\n";
   return argstr;
 }
 
@@ -135,18 +137,20 @@ void varMethod(VarMap& scriptVariables, std::vector<syntaxNode> arguments)
 void setMethod(Variable * variableToSet, VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {
   //if one arg or less
-  if (arguments.size() <= 1)
+  if (arguments.size() <= 2)
   {
   variableToSet->setVariable(parseArguments(scriptVariables, 1, syntax, arguments, currentScope),0);
   }
-  else if (arguments.size() <= 2)
+  else if (arguments.size() <= 3)
   {
   //if more than one arg
-  variableToSet->setVariable(parseArguments(scriptVariables, 1, syntax, arguments, currentScope), stoi(arguments[1]._syntax));
+  variableToSet->setVariable(parseArguments(scriptVariables, 2, syntax, arguments, currentScope), stoi(parseArguments(scriptVariables, 1, syntax, arguments, currentScope)));
   }
 }
 
 std::string readVarIndexMethod(Variable * variableToSet, VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope)
 {
-  return scriptVariables[arguments[0]._syntax].getVariableValue()[stoi(arguments[1]._syntax)];
+  std::cout << stoi(parseArguments(scriptVariables, 1, syntax, arguments, currentScope)) << " <- index\n";
+  std::cout << parseArguments(scriptVariables, 0, syntax, arguments, currentScope, stoi(parseArguments(scriptVariables, 1, syntax, arguments, currentScope))) << " <- indexResult\n";
+  return parseArguments(scriptVariables, 0, syntax, arguments, currentScope, stoi(parseArguments(scriptVariables, 1, syntax, arguments, currentScope)));
 }

@@ -1,0 +1,19 @@
+STARTMOD
+VAR("Inventory", "firstItem");
+VAR("UserInput", "none");
+
+exec("addItem", "item", "itemIndex")
+  set("Inventory", itemIndex, item);
+  return(item);
+^
+
+exec("getItem", "itemGetIndex")
+  return(index(Inventory, itemGetIndex));
+^
+
+print("Input an item and its index:`n");
+addItem(input, input);
+
+print("Input an item index:`n");
+index(Inventory, input);
+print(getItem(input));

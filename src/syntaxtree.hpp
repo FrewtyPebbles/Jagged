@@ -109,7 +109,7 @@ void parseVariable(std::string Type, std::string name, std::string value); //fee
 
 //methods
 
-std::string parseArguments(VarMap& scriptVariables1, unsigned argumentnum, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);
+std::string parseArguments(VarMap& scriptVariables1, unsigned argumentnum, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope, unsigned varIndex = 0);
 
 //math functions
 std::string subtractNums(VarMap& scriptVariables, syntaxNode syntax, std::vector<syntaxNode> arguments, std::vector<syntaxNode> & currentScope);

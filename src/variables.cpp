@@ -9,7 +9,20 @@ varName(_varName),
 data(_data)
 {}
 
-void Variable::setVariable(std::string _varValue,std::size_t index){data[index] = _varValue;}
+void Variable::setVariable(std::string _varValue,std::size_t index)
+{
+  if (data.capacity() > index)
+  {
+    data[index] = _varValue;
+  }
+  else
+  {
+    data.resize(index + 1);
+    data[index] = _varValue;
+  }
+  return;
+
+}
 
 std::string& Variable::getVariableName()
 {
