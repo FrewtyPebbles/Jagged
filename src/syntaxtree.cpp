@@ -116,6 +116,7 @@ syntaxNode parseSyntax(syntaxNode syntax, std::vector<syntaxNode> arguments, std
 
 std::vector<syntaxNode> itterateArguments(std::string type, std::vector<syntaxNode> & arguments, syntaxNode userFunction)
 {
+  //std::cout << "Itter args\n";
   std::vector<syntaxNode> returnVec = {};
   if(type == "function")
   {
@@ -238,7 +239,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
 {
   //if (currentScope._parent != nullptr)std::cout << "\n" << currentScope._parent->_syntax << " <- Parrent\n" << currentScope._syntax << " <- Child\n";
   //SCOPES
-  //std::cout << currentScope._syntax << " current Scope!\n";
+  std::cout << currentScope._syntax << " current Scope!\n";
   syntaxNode ReturnValue;
   std::string ReturnString = "";
   std::vector<syntaxNode> functionArgs;
@@ -332,7 +333,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
     }
     else
     {
-      
+
       ReturnValue = parseSyntax(currentScope._scope[currentScope.scopeIndex], userArguments, currentScope._scope[currentScope.scopeIndex]._scope);
     }
     ++currentScope.scopeIndex;

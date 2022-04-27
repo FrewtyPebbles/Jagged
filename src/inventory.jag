@@ -8,7 +8,7 @@ exec("addItem", "item", "itemIndex")
 ^
 
 exec("getItem", "itemGetIndex")
-  print(index("Inventory", itemGetIndex), "`n");
+  return(index("Inventory", itemGetIndex));
 ^
 
 exec("insertRecursion")
@@ -21,7 +21,7 @@ exec("insertRecursion")
 ^
 exec("extractRecursion")
   print("Input an item index:`n");
-  getItem(input);
+  print(getItem(input), "`n");
   print("Would you like to check for another item in the inventory (y/n)`n");
   if(equal(input,"y"))
     extractRecursion;
