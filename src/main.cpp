@@ -2,7 +2,7 @@
 
 /* TODO:
 
- - implement modules
+ - make modules relative to "rootModule"/../"relative module path"
  - make tokenizer more robust
  - add number tokenizer support so you dont have to put numbers in quotation marks
 
@@ -10,10 +10,11 @@
 
  - Comments cause issues in tokenizer
  - User function arguments parse more than once
+ as an standard library function argument.
 
 */
 
-const std::string VERSION = "0.12.20";
+const std::string VERSION = "0.13.21";
 
 int main (int argc, char* argv[])
 {

@@ -122,6 +122,8 @@ std::string functionInstantiateMethod(VarMap& scriptVariables, syntaxNode Instan
   newFunction._scope.insert(newFunction._scope.end(), Instantiation._scope.begin(), Instantiation._scope.end());
   //newFunction._scope = Instantiation._scope;
   functions[arguments[0]._syntax] = newFunction;
+  /*std::cout << newFunction._syntax << " exec args :\n";
+  for (auto argu : newFunction._arguments) std::cout << argu._syntax << " <- argu\n";*/
   return arguments[0]._syntax;
 }
 //VARIABLE METHODS

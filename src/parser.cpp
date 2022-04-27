@@ -144,6 +144,7 @@ int scanSource(std::string source, std::stack<syntaxNode*> & scopeStack)
       else if (character == 'v') keyword += '\v';
       else if (character == 'a') keyword += '\a';
       else if (character == 'f') keyword += '\f';
+      else if (character == '"') keyword += '\"';
       lastChar = character;
       continue;
     }
