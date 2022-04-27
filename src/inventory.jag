@@ -21,7 +21,7 @@ exec("insertRecursion")
 ^
 exec("extractRecursion")
   print("Input an item index:`n");
-  print(getItem(input), "`n");
+  jag(jag(getItem(input)), "`n");
   print("Would you like to check for another item in the inventory (y/n)`n");
   if(equal(input,"y"))
     extractRecursion;
