@@ -1,4 +1,9 @@
 STARTMOD
+@plus@
+@minus@
+@times@
+@fraction@
+@recursionExample@
 
 # Number Functions:
 exec("plus")

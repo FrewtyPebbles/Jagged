@@ -1,4 +1,6 @@
 STARTMOD
+@exponentRecursion@
+@exponent@
 
 exec("exponentRecursion", "itterator", "exponentBaseValue", "exponentproduct", "exponentAmmount")
 	if(less(itterator, subtract(exponentAmmount, "1")))

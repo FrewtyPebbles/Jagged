@@ -114,6 +114,7 @@ std::string functionInstantiateMethod(VarMap& scriptVariables, syntaxNode Instan
   {
     for (std::size_t i = 1; i < arguments.size(); ++i)
     {
+      //std::cout << arguments[i]._syntax << "------++++\n";
       std::vector<syntaxNode> varArguments = {syntaxNode("literal", arguments[i]._syntax, arguments[i]._syntax), syntaxNode("literal", "", "")};
       varMethod(scriptVariables, varArguments);
     }

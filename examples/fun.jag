@@ -1,4 +1,6 @@
 STARTMOD
+@makeMoney@
+@ping@
 
 exec("makeMoney", "ammount")
 	return(concatenate("$", ammount));

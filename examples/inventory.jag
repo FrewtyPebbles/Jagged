@@ -2,6 +2,11 @@ STARTMOD
 VAR("Inventory", "firstItem");
 VAR("UserInput", "none");
 
+@addItem@
+@insertRecursion@
+@getItem@
+@extractRecursion@
+
 exec("addItem", "item", "itemIndex")
   set("Inventory", itemIndex, item);
   return(item);
@@ -21,7 +26,7 @@ exec("insertRecursion")
 ^
 exec("extractRecursion")
   print("Input an item index:`n");
-  jag(jag(getItem(input)), "`n");
+  print(getItem(input), "`n");
   print("Would you like to check for another item in the inventory (y/n)`n");
   if(equal(input,"y"))
     extractRecursion;

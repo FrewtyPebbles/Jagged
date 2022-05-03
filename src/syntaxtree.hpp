@@ -101,7 +101,7 @@ std::string itterateScopeRecursion(syntaxNode currentScope, std::vector<syntaxNo
 
 std::string itterateScope(syntaxNode currentSyntax, std::vector<syntaxNode> & userArguments);  //itterate recursively through syntax tree
 
-std::vector<syntaxNode> itterateArguments(std::string type, std::vector<syntaxNode> & arguments, syntaxNode userFunction = syntaxNode());  //itterate through arguments
+std::vector<syntaxNode> itterateArguments(syntaxNode parentNode, std::vector<syntaxNode> & arguments, syntaxNode userFunction = syntaxNode());  //itterate through arguments
 
 
 

@@ -1,5 +1,6 @@
 #include "parser.hpp"
 
+namespace fs = std::filesystem;
 //TOKENIZER
 
 std::vector<std::string> scopeLookupTable =
@@ -34,6 +35,8 @@ std::vector<std::string> grammarLookupTable =
 std::vector<std::string> literalLookupTable;
 
 std::vector<std::string> variableLookupTable;
+
+std::vector<std::string> functionLookupTable;
 
 bool grammarExists = false;
 bool isQuoting = false;
@@ -103,10 +106,25 @@ void parseGrammar(std::stack<syntaxNode*>& scopeStack, std::string grammar, bool
     }
     if (!grammarExists && !isQuoting)
     {
+      bool isFunction = false;
+      for (auto i : functionLookupTable)
+      {
+        if (grammar == i)
+        {
+          isFunction = true;
+        }
+      }
       if (isArgument)
       {
-        variableLookupTable.push_back(grammar);
-        nextSyntax._type = "variable";
+        if (isFunction)
+        {
+          nextSyntax._type = "functionArgument";
+        }
+        else
+        {
+          variableLookupTable.push_back(grammar);
+          nextSyntax._type = "variable";
+        }
         scopeStack.top()->_arguments.push_back(nextSyntax);
       }
       else
@@ -132,6 +150,7 @@ int scanSource(std::string source, std::stack<syntaxNode*> & scopeStack)
 {
   std::string keyword;
   bool isArgument = false;
+  bool isFunctionDeclaration = false;
   char lastChar;
   for(char character : source)
   {
@@ -261,7 +280,11 @@ int scanSource(std::string source, std::stack<syntaxNode*> & scopeStack)
           keyword = "";
           break;
         case '@':
-          parseGrammar(scopeStack, keyword, isArgument);
+          if (isFunctionDeclaration == true)
+          {
+            functionLookupTable.push_back(keyword);
+          }
+          isFunctionDeclaration = !isFunctionDeclaration;
           keyword = "";
           break;
         case '<':
@@ -325,7 +348,7 @@ int scanSource(std::string source, std::stack<syntaxNode*> & scopeStack)
   return 0;
 }
 
-std::string getFileContent(std::string fileContent)
+std::string getFileContent(std::string currentFile, std::string fileContent)
 {
   std::string Keyword;
   std::stringstream Content;
@@ -349,18 +372,19 @@ std::string getFileContent(std::string fileContent)
       std::string moduleContent;
       std::stringstream source;
       try{
-        std::ifstream moduleFile(Keyword + ".jag", std::ifstream::in);
+        std::ifstream moduleFile(fs::path(currentFile).parent_path().string() + "/" + Keyword + ".jag", std::ifstream::in);
         moduleFile.exceptions ( std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit );
         source << moduleFile.rdbuf();
         moduleFile.close();
         moduleContent = "\n" + source.str();
         //std::cout << moduleContent;
-        Content << "\n" << getFileContent(moduleContent) << "\n";
+        Content << "\n" << getFileContent(fs::path(currentFile).parent_path().string() + "/" + Keyword + ".jag", moduleContent) << "\n";
 
       }
       catch(std::exception const& e)
       {
-        std::cout << "\n (PREPROCESSOR) !ERROR! > MODULE NOT FOUND : " << Keyword << ".jag\nMake sure your file path is relative to the compiler and didnt include an extension!\n\n";
+        std::cout << "\n (PREPROCESSOR) !ERROR! > MODULE NOT FOUND : " << Keyword << ".jag"
+        << ".jag\nMake sure your file path is relative to the calling source file and didnt include an extension!\n\n";
       }
       Keyword = "";
     }

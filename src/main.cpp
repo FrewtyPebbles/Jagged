@@ -2,19 +2,19 @@
 
 /* TODO:
 
- - make modules relative to "rootModule"/../"relative module path"
+ - *priority* Need to implement a private heap to store all data
+ because c++ stack does not have enough memory to store everything.
  - make tokenizer more robust
  - add number tokenizer support so you dont have to put numbers in quotation marks
 
  BUGS:
 
  - Comments cause issues in tokenizer
- - User function arguments parse more than once
- as an standard library function argument.
+ - Stack runs out of memory
 
 */
 
-const std::string VERSION = "0.13.21";
+const std::string VERSION = "0.14.21";
 
 int main (int argc, char* argv[])
 {
@@ -31,7 +31,7 @@ int main (int argc, char* argv[])
     sourceFile.close();
     moduleContent = "\n" + source.str();
     //std::cout << getFileContent(moduleContent);
-    scanSource(getFileContent(moduleContent), scopeStack);
+    scanSource(getFileContent(argv[1], moduleContent), scopeStack);
   }
   else
   {
@@ -44,7 +44,7 @@ int main (int argc, char* argv[])
       std::stack<syntaxNode*> scopeStack = {};
       scopeStack.push(new syntaxNode("global","global","global"));
       //std::cout << getFileContent(input);
-      scanSource(getFileContent(input), scopeStack);
+      scanSource(getFileContent("NULL", input), scopeStack);
     }
   }
 }

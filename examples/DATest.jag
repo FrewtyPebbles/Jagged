@@ -1,0 +1,8 @@
+STARTMOD
+
+@testFunc@
+
+exec("testFunc", "funcInput")
+  return(concatenate("input : ", funcInput, "`n"));
+^
+print(testFunc(input));
