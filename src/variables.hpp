@@ -14,11 +14,11 @@ private:
   std::vector<std::string> data[1];
 public:
   Variable();
-  Variable(syntaxNode _instantiatedScope, std::string _varName, std::vector<std::string> _data);
+  Variable(syntaxNode * _instantiatedScope, std::string _varName, std::vector<std::string> _data);
   void setVariable(std::string _varName);
   std::string& getVariableName();
   std::string& getVariableValue();
-  syntaxNode instantiatedScope;
+  syntaxNode * instantiatedScope;
 };
 
 class constantVariable
@@ -28,10 +28,10 @@ private:
   std::vector<std::string> data[1];
 public:
   constantVariable();
-  constantVariable(syntaxNode _instantiatedScope, std::string _varName, std::vector<std::string> _data);
+  constantVariable(syntaxNode * _instantiatedScope, std::string _varName, std::vector<std::string> _data);
   std::string& getVariableName();
   std::string& getVariableValue();
-  syntaxNode instantiatedScope;
+  syntaxNode * instantiatedScope;
 };
 
 class discVariable
@@ -42,7 +42,7 @@ private:
   std::vector<std::string> data[1];
 public:
   discVariable();
-  discVariable(syntaxNode _instantiatedScope, std::string _varName, std::vector<std::string> _data, std::string _filePath);
+  discVariable(syntaxNode * _instantiatedScope, std::string _varName, std::vector<std::string> _data, std::string _filePath);
   std::string readName();
   std::vector<std::string> readData();
   void deleteVariable();

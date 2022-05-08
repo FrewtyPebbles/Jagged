@@ -51,6 +51,7 @@ int main (int argc, char* argv[])
       sourceFile.close();
       moduleContent = "\n" + source.str();
       //std::cout << getFileContent(moduleContent);
+      
       scanSource(getFileContent(argv[1], moduleContent), scopeStack);
     }
   }

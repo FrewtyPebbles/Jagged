@@ -3,7 +3,7 @@
 
 //Variables-----------------
 Variable::Variable(){}
-Variable::Variable(syntaxNode _instantiatedScope, std::string _varName, std::vector<std::string> _data):
+Variable::Variable(syntaxNode * _instantiatedScope, std::string _varName, std::vector<std::string> _data):
 instantiatedScope(_instantiatedScope),
 varName(_varName),
 data(_data)
@@ -37,7 +37,7 @@ std::vector<std::string>& Variable::getVariableValue()
 //ConstantVariables---------------
 constantVariable::constantVariable(){}
 
-constantVariable::constantVariable(syntaxNode _instantiatedScope, std::string _varName, std::vector<std::string> _data):
+constantVariable::constantVariable(syntaxNode * _instantiatedScope, std::string _varName, std::vector<std::string> _data):
 instantiatedScope(_instantiatedScope),
 varName(_varName),
 data(_data)
@@ -56,7 +56,7 @@ std::vector<std::string>& constantVariable::getVariableValue()
 //DiscVariables
 discVariable::discVariable(){}
 
-discVariable::discVariable(syntaxNode _instantiatedScope, std::string _varName, std::vector<std::string> _data, std::string _filePath)
+discVariable::discVariable(syntaxNode * _instantiatedScope, std::string _varName, std::vector<std::string> _data, std::string _filePath)
 {
   //open file and check for variable
   //if variable exists do not change in declaration
