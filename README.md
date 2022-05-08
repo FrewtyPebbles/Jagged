@@ -1,6 +1,8 @@
 # Jagged v0.14.21
 **Jagged** is a scripting language that aims to be intuitive and fun for small and large projects.
 
+Enter *jag examples/filename.jag* to execute one of the example scripts.
+
 # Special Behaviors
 **Jagged** has many quirks that make it unique to script in.  Here is a list of just a few:
 
