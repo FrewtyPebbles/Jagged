@@ -1,7 +1,7 @@
 # Jagged v0.14.21
-**Jagged** is a scripting language that aims to be intuitive and fun for small and large projects.
+**Jagged** is a scripting language that aims to be portable and intuitive.
 
-Enter *jag examples/filename.jag* to execute one of the example scripts.
+Run jag or jag.exe by entering *jag examples/filename.jag* (or *./jag examples/filename.jag* on linux) into a terminal in the same directory as the *jag.exe* (or *jag*) binary to execute one of the example scripts. To build a binary from source, just execute *make* inside the *src* folder.
 
 # Special Behaviors
 **Jagged** has many quirks that make it unique to script in.  Here is a list of just a few:
