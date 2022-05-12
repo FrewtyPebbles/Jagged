@@ -372,19 +372,30 @@ std::string getFileContent(std::string currentFile, std::string fileContent)
       std::string moduleContent;
       std::stringstream source;
       try{
-        std::ifstream moduleFile(fs::path(currentFile).parent_path().string() + "/" + Keyword + ".jag", std::ifstream::in);
-        moduleFile.exceptions ( std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit );
-        source << moduleFile.rdbuf();
-        moduleFile.close();
-        moduleContent = "\n" + source.str();
-        //std::cout << moduleContent;
-        Content << "\n" << getFileContent(fs::path(currentFile).parent_path().string() + "/" + Keyword + ".jag", moduleContent) << "\n";
+        if (fs::path(currentFile).parent_path().string() == "")
+        {
+          std::ifstream moduleFile(Keyword + ".jag", std::ifstream::in);
+          moduleFile.exceptions ( std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit );
+          source << moduleFile.rdbuf();
+          moduleFile.close();
+          moduleContent = "\n" + source.str();
+          Content << "\n" << getFileContent(Keyword + ".jag", moduleContent) << "\n";
+        }
+        else
+        {
+          std::ifstream moduleFile(fs::path(currentFile).parent_path().string() + "/" + Keyword + ".jag", std::ifstream::in);
+          moduleFile.exceptions ( std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit );
+          source << moduleFile.rdbuf();
+          moduleFile.close();
+          moduleContent = "\n" + source.str();
+          Content << "\n" << getFileContent(fs::path(currentFile).parent_path().string() + "/" + Keyword + ".jag", moduleContent) << "\n";
+        }
 
       }
       catch(std::exception const& e)
       {
-        std::cout << "\n (PREPROCESSOR) !ERROR! > MODULE NOT FOUND : " << Keyword << ".jag"
-        << ".jag\nMake sure your file path is relative to the calling source file and didnt include an extension!\n\n";
+        std::cout << "\n (PREPROCESSOR) !ERROR! > MODULE NOT FOUND : " << fs::path(currentFile).parent_path().string() + "/" + Keyword
+        << "\nMake sure your file path is relative to the calling source file and didnt include an extension!\n\n";
       }
       Keyword = "";
     }
