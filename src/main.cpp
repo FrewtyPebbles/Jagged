@@ -1,5 +1,5 @@
 #include "parser.hpp"
-
+#pragma comment(linker, "/STACK:8000000")
 /* TODO:
 
  - *priority* Need to implement a private heap to store all data
@@ -19,7 +19,7 @@ const std::string VERSION = "0.14.21";
 int main (int argc, char* argv[])
 {
   std::string input;
-  
+
   if (argc > 1)
   {
     if (std::string(argv[1]) == "-v" || std::string(argv[1]) == "--v" || std::string(argv[1]) == "-version" || std::string(argv[1]) == "--version")
